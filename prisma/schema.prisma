@@ -1,0 +1,96 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Role: "USER" | "ADMIN"
+// Status: "PENDING" | "APPROVED" | "REJECTED"
+
+model User {
+  id            String         @id @default(cuid())
+  email         String         @unique
+  name          String?
+  passwordHash  String
+  role          String         @default("USER")
+  country       String?
+  university    String
+  department    String?
+  score         Int            @default(0)
+  badge         String         @default("Drone")
+  emailVerified Boolean        @default(false)
+  questions     Question[]
+  answers       Answer[]
+  votes         Vote[]
+  notifications Notification[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+model Question {
+  id           String    @id @default(cuid())
+  userId       String
+  title        String
+  body         String?
+  imageUrls    String    @default("[]")
+  tags         String    @default("[]")
+  status       String    @default("PENDING")
+  rejectReason String?
+  isResolved   Boolean   @default(false)
+  voteScore    Int       @default(0)
+  answers      Answer[]
+  votes        Vote[]    @relation("QuestionVotes")
+  user         User      @relation(fields: [userId], references: [id])
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+model Answer {
+  id           String   @id @default(cuid())
+  questionId   String
+  userId       String
+  body         String
+  imageUrls    String   @default("[]")
+  isBest       Boolean  @default(false)
+  status       String   @default("PENDING")
+  rejectReason String?
+  voteScore    Int      @default(0)
+  question     Question @relation(fields: [questionId], references: [id])
+  user         User     @relation(fields: [userId], references: [id])
+  votes        Vote[]   @relation("AnswerVotes")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Vote {
+  id           String   @id @default(cuid())
+  userId       String
+  targetType   String   // "question" | "answer"
+  targetId     String
+  value        Int      // 1 | -1
+  user         User     @relation(fields: [userId], references: [id])
+  question     Question? @relation("QuestionVotes", fields: [questionId], references: [id])
+  questionId   String?
+  answer       Answer?  @relation("AnswerVotes", fields: [answerId], references: [id])
+  answerId     String?
+  createdAt    DateTime @default(now())
+
+  @@unique([userId, targetId])
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  type      String
+  refId     String?
+  message   String
+  isRead    Boolean  @default(false)
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+}

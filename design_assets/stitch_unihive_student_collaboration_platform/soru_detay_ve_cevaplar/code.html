@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>UniHive - Question Detail</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+                  "primary-fixed-dim": "#ebc23e",
+                  "on-secondary-fixed": "#1b1b1b",
+                  "on-tertiary": "#ffffff",
+                  "on-primary-fixed": "#241a00",
+                  "tertiary-container": "#ffccd8",
+                  "on-tertiary-fixed": "#3f001b",
+                  "inverse-on-surface": "#f8f0e1",
+                  "surface-container-lowest": "#ffffff",
+                  "error": "#ba1a1a",
+                  "outline-variant": "#d0c6ae",
+                  "secondary-fixed": "#e2e2e2",
+                  "on-background": "#1f1b12",
+                  "outline": "#7f7662",
+                  "primary": "#735c00",
+                  "on-tertiary-fixed-variant": "#8b0e45",
+                  "tertiary-fixed": "#ffd9e1",
+                  "surface-container": "#f6edde",
+                  "on-secondary": "#ffffff",
+                  "on-primary": "#ffffff",
+                  "tertiary": "#ab2c5d",
+                  "on-primary-fixed-variant": "#574500",
+                  "secondary": "#5e5e5e",
+                  "surface-tint": "#735c00",
+                  "on-secondary-fixed-variant": "#474747",
+                  "surface-container-high": "#f0e7d9",
+                  "on-primary-container": "#735c00",
+                  "surface": "#fff8f0",
+                  "surface-container-low": "#fbf3e4",
+                  "on-surface": "#1f1b12",
+                  "inverse-primary": "#ebc23e",
+                  "secondary-fixed-dim": "#c6c6c6",
+                  "background": "#fff8f0",
+                  "surface-dim": "#e1d9cb",
+                  "surface-bright": "#fff8f0",
+                  "inverse-surface": "#343026",
+                  "error-container": "#ffdad6",
+                  "on-surface-variant": "#4d4634",
+                  "on-secondary-container": "#646464",
+                  "surface-variant": "#eae2d3",
+                  "on-error-container": "#93000a",
+                  "tertiary-fixed-dim": "#ffb1c5",
+                  "surface-container-highest": "#eae2d3",
+                  "on-error": "#ffffff",
+                  "primary-fixed": "#ffe087",
+                  "on-tertiary-container": "#ab2c5d",
+                  "primary-container": "#ffd54f",
+                  "secondary-container": "#e2e2e2"
+          },
+          "borderRadius": {
+                  "DEFAULT": "0.25rem",
+                  "lg": "0.5rem",
+                  "xl": "0.75rem",
+                  "full": "9999px"
+          },
+          "spacing": {
+                  "margin-desktop": "24px",
+                  "unit": "8px",
+                  "card-padding": "20px",
+                  "margin-mobile": "16px",
+                  "gutter": "16px",
+                  "container-max": "1200px"
+          },
+          "fontFamily": {
+                  "body-md": [
+                          "Plus Jakarta Sans"
+                  ],
+                  "label-caps": [
+                          "Plus Jakarta Sans"
+                  ],
+                  "headline-md": [
+                          "Plus Jakarta Sans"
+                  ],
+                  "title-sm": [
+                          "Plus Jakarta Sans"
+                  ],
+                  "display-lg": [
+                          "Plus Jakarta Sans"
+                  ],
+                  "body-sm": [
+                          "Plus Jakarta Sans"
+                  ]
+          },
+          "fontSize": {
+                  "body-md": [
+                          "16px",
+                          {
+                                  "lineHeight": "1.6",
+                                  "fontWeight": "400"
+                          }
+                  ],
+                  "label-caps": [
+                          "12px",
+                          {
+                                  "lineHeight": "1",
+                                  "letterSpacing": "0.05em",
+                                  "fontWeight": "700"
+                          }
+                  ],
+                  "headline-md": [
+                          "24px",
+                          {
+                                  "lineHeight": "1.3",
+                                  "fontWeight": "700"
+                          }
+                  ],
+                  "title-sm": [
+                          "18px",
+                          {
+                                  "lineHeight": "1.4",
+                                  "fontWeight": "600"
+                          }
+                  ],
+                  "display-lg": [
+                          "40px",
+                          {
+                                  "lineHeight": "1.2",
+                                  "letterSpacing": "-0.02em",
+                                  "fontWeight": "800"
+                          }
+                  ],
+                  "body-sm": [
+                          "14px",
+                          {
+                                  "lineHeight": "1.5",
+                                  "fontWeight": "400"
+                          }
+                  ]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .clip-hex {
+      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    .icon-fill {
+      font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+  </style>
+</head>
+<body class="bg-surface text-on-surface font-body-md text-body-md antialiased flex">
+<!-- SideNavBar (Desktop Only) -->
+<nav class="hidden md:flex flex-col h-screen w-64 border-r border-zinc-100 bg-white dark:bg-zinc-950 p-6 fixed left-0 top-0">
+<div class="mb-8">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-primary-container text-on-primary-container flex items-center justify-center clip-hex">
+<span class="material-symbols-outlined icon-fill">hive</span>
+</div>
+<div>
+<h1 class="text-xl font-black text-black dark:text-white tracking-tighter">UniHive</h1>
+<p class="text-xs text-zinc-500 font-medium">Academic Swarm</p>
+</div>
+</div>
+</div>
+<ul class="flex flex-col gap-2 flex-grow">
+<li>
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg text-black dark:text-white font-bold border-r-4 border-amber-400 bg-zinc-50 hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined icon-fill">home</span>
+<span class="font-title-sm text-title-sm">Home</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg text-zinc-500 dark:text-zinc-400 hover:text-black dark:hover:text-white hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">explore</span>
+<span class="font-title-sm text-title-sm">Explore</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg text-zinc-500 dark:text-zinc-400 hover:text-black dark:hover:text-white hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">notifications</span>
+<span class="font-title-sm text-title-sm">Notifications</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg text-zinc-500 dark:text-zinc-400 hover:text-black dark:hover:text-white hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">mail</span>
+<span class="font-title-sm text-title-sm">Messages</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg text-zinc-500 dark:text-zinc-400 hover:text-black dark:hover:text-white hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">bookmark</span>
+<span class="font-title-sm text-title-sm">Bookmarks</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg text-zinc-500 dark:text-zinc-400 hover:text-black dark:hover:text-white hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-title-sm text-title-sm">Profile</span>
+</a>
+</li>
+</ul>
+<button class="mt-8 bg-on-surface text-surface py-3 px-6 rounded-full font-title-sm text-title-sm hover:-translate-y-1 transition-transform shadow-sm">
+      Create Post
+    </button>
+<div class="mt-auto pt-6 border-t border-zinc-100 flex justify-between">
+<a class="text-zinc-500 hover:text-black flex items-center gap-2" href="#">
+<span class="material-symbols-outlined text-sm">settings</span>
+<span class="font-body-sm text-body-sm">Settings</span>
+</a>
+<a class="text-zinc-500 hover:text-black flex items-center gap-2" href="#">
+<span class="material-symbols-outlined text-sm">help</span>
+<span class="font-body-sm text-body-sm">Help</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 md:ml-64 bg-surface min-h-screen">
+<!-- TopAppBar -->
+<header class="sticky top-0 w-full flex justify-between items-center px-6 py-3 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-md border-b border-zinc-100 dark:border-zinc-900 z-40">
+<div class="flex items-center gap-4 w-full max-w-md">
+<!-- Mobile Menu Trigger -->
+<button class="md:hidden text-zinc-600">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<!-- Search -->
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface-container-lowest border border-zinc-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent font-body-sm text-body-sm placeholder:text-zinc-400" placeholder="Search the hive..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-zinc-600 hover:text-amber-500 transition-colors hidden sm:block">
+<span class="material-symbols-outlined">notifications_none</span>
+</button>
+<button class="text-zinc-600 hover:text-amber-500 transition-colors hidden sm:block">
+<span class="material-symbols-outlined">account_balance_wallet</span>
+</button>
+<button class="text-zinc-600 hover:text-amber-500 transition-colors hidden sm:block">
+<span class="material-symbols-outlined">grid_view</span>
+</button>
+<div class="w-8 h-8 bg-zinc-200 clip-hex ml-2 overflow-hidden">
+<img alt="Hexagonal user avatar" class="w-full h-full object-cover" data-alt="A close-up portrait of a young female university student looking focused, placed inside a hexagonal frame. The lighting is soft and natural, contributing to a modern, bright UI aesthetic typical of a social learning platform." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDA7v9TWbd1nM5LaInHIuDHhu576EdZbVFAQlEFB4OKrmZkuSE9g90yabkq7OTFkaaWXHa3ItuwvlXD3lR4ahYy33xzPRqeIEGJVeL7XoKq1I8SiIRrQXSDZQ2ovgdFD2EO-kTy0EcBznY_ygpQqfKM07zigvmMa6Ve744Uw_YYlpdjcZkeF2RYH-RS4EU0nZ-Bw-pld3eafow62OL0STKplaucfa1CzpqGolMtxPIPXMsUdUyIFifrdUGyn-tNtN7Xr9p2Wuylxds"/>
+</div>
+</div>
+</header>
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-8 grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Center Feed (8 cols) -->
+<div class="lg:col-span-8 flex flex-col gap-6">
+<!-- Back Navigation -->
+<a class="flex items-center gap-2 text-zinc-500 hover:text-on-surface transition-colors w-fit" href="#">
+<span class="material-symbols-outlined text-sm">arrow_back</span>
+<span class="font-body-sm text-body-sm font-semibold">Back to Computer Science Hive</span>
+</a>
+<!-- Original Question Card -->
+<article class="bg-surface-container-lowest border border-black/5 rounded-xl p-card-padding shadow-sm relative overflow-hidden">
+<!-- Hexagon Watermark -->
+<div class="absolute -right-10 -top-10 text-primary-container/10 pointer-events-none">
+<span class="material-symbols-outlined" style="font-size: 160px; font-variation-settings: 'FILL' 1;">hexagon</span>
+</div>
+<div class="flex gap-4 relative z-10">
+<!-- Pollination Controls -->
+<div class="flex flex-col items-center gap-1 min-w-[40px]">
+<button class="text-zinc-400 hover:text-green-600 transition-colors">
+<span class="material-symbols-outlined text-2xl font-bold">keyboard_arrow_up</span>
+</button>
+<span class="font-title-sm text-title-sm font-bold text-on-surface">142</span>
+<button class="text-zinc-400 hover:text-red-600 transition-colors">
+<span class="material-symbols-outlined text-2xl font-bold">keyboard_arrow_down</span>
+</button>
+</div>
+<!-- Content -->
+<div class="flex-1">
+<!-- Author Header -->
+<div class="flex items-center gap-3 mb-4">
+<div class="w-10 h-10 bg-zinc-200 clip-hex overflow-hidden">
+<img alt="Author avatar" class="w-full h-full object-cover" data-alt="A portrait of a male university student in a well-lit library, framed within a hexagon. The atmosphere is academic and focused, fitting a modern collaborative study platform with bright, airy lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBLFVY_i-VxoLiH7v8UznvmiczRXiUe8_NQRxUs7liv_aIEc0hBY3zVmYwhLEfVlEKP7mS7g1zPJhCvkzMjFrkEaMRYYg_2e7ivfpw3er5b1czxnkd_Uh6A3rngG-nC-c4DAluOlRr-533Te1RPyOD_UYV6uQ--pVFasbvJjE3aV13rSzcK2UxrSyl5i93-ZfH81mhgRyRVrhHZZ_k8WPkonUvjSFi5TJgbVkzLpocBUSD6ErWWTKK90AXt2yUPDv46V-RMRXdG0GY"/>
+</div>
+<div>
+<h3 class="font-title-sm text-title-sm text-on-surface leading-none">Alex Mercer</h3>
+<span class="font-body-sm text-body-sm text-zinc-500">CS201 • 2 hours ago</span>
+</div>
+<div class="ml-auto flex gap-2">
+<span class="px-3 py-1 bg-tertiary-container/20 text-on-tertiary-fixed rounded-full font-label-caps text-label-caps border border-tertiary-container">#Algorithms</span>
+<span class="px-3 py-1 bg-tertiary-container/20 text-on-tertiary-fixed rounded-full font-label-caps text-label-caps border border-tertiary-container">#Help</span>
+</div>
+</div>
+<!-- Question Body -->
+<h2 class="font-headline-md text-headline-md text-on-surface mb-3">Can someone explain the time complexity of QuickSort in the worst-case scenario?</h2>
+<p class="font-body-md text-body-md text-zinc-700 mb-4 whitespace-pre-line">
+                  I understand that the average case is O(n log n), but I'm getting confused about why it degrades to O(n^2) when the array is already sorted. 
+                  
+                  Isn't the pivot choice supposed to prevent this? If we always pick the last element as the pivot in a sorted array, doesn't it just partition it into an empty array and an array of size n-1?
+                  
+                  Any visual explanations would be super helpful. Trying to wrap my head around this before the midterm!
+                </p>
+<!-- Footer Actions -->
+<div class="flex items-center gap-6 mt-6 pt-4 border-t border-zinc-100 text-zinc-500">
+<button class="flex items-center gap-2 hover:text-primary transition-colors group">
+<span class="material-symbols-outlined text-lg group-hover:text-primary-container transition-colors">sync</span>
+<span class="font-body-sm text-body-sm font-semibold">12 Re-hives</span>
+</button>
+<button class="flex items-center gap-2 hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-lg">chat_bubble_outline</span>
+<span class="font-body-sm text-body-sm font-semibold">4 Replies</span>
+</button>
+<button class="flex items-center gap-2 hover:text-on-surface transition-colors ml-auto">
+<span class="material-symbols-outlined text-lg">share</span>
+<span class="font-body-sm text-body-sm font-semibold">Share</span>
+</button>
+</div>
+</div>
+</div>
+</article>
+<!-- Help this bee (Reply Box) -->
+<div class="bg-surface-container-lowest border border-black/5 rounded-xl p-card-padding shadow-sm">
+<div class="flex gap-4">
+<div class="w-10 h-10 bg-zinc-200 clip-hex overflow-hidden flex-shrink-0">
+<img alt="Current user avatar" class="w-full h-full object-cover" data-alt="A close-up portrait of a young female university student looking focused, placed inside a hexagonal frame. The lighting is soft and natural, contributing to a modern, bright UI aesthetic typical of a social learning platform." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAhsYKX3oSk6XXXxGQqr3j1APzq9JNt0JnIdYSO4zPAOfBe3EZcuSYS-U_7ilbqZW0hp9Rymvc5zizacDjQlo693wU4vHbPjsFWMrNBHBx_QRiweTk5Gnl5HbxbMXaod5qPUHZ235BHDPfyrIEm3GUYvoug58k16haDaoB-i21Uu--VDH_pfNqImAtHy8StCk0Lv_HZuktq734hmR1Pc_Z3Wz1ZSHyf1hbHkwEuYoXDZlC-1pnM02gaXTb_3JW99QFZVXqbkEeAaoU"/>
+</div>
+<div class="flex-1">
+<textarea class="w-full bg-transparent border-none focus:ring-0 p-0 resize-none font-body-md text-body-md text-on-surface placeholder:text-zinc-400 border-b-2 border-zinc-200 focus:border-amber-400 transition-colors rounded-none mb-4" placeholder="Help this bee out! Share your knowledge..." rows="3" style="box-shadow: none;"></textarea>
+<div class="flex justify-between items-center">
+<div class="flex gap-2 text-zinc-400">
+<button class="hover:text-amber-500 transition-colors p-2 rounded-full hover:bg-amber-50">
+<span class="material-symbols-outlined">image</span>
+</button>
+<button class="hover:text-amber-500 transition-colors p-2 rounded-full hover:bg-amber-50">
+<span class="material-symbols-outlined">code</span>
+</button>
+<button class="hover:text-amber-500 transition-colors p-2 rounded-full hover:bg-amber-50">
+<span class="material-symbols-outlined">attach_file</span>
+</button>
+</div>
+<button class="bg-on-surface text-surface py-2 px-6 rounded-full font-title-sm text-title-sm hover:-translate-y-1 transition-transform shadow-sm">
+                     Post Reply
+                   </button>
+</div>
+</div>
+</div>
+</div>
+<div class="h-px bg-zinc-200 w-full my-2"></div>
+<h3 class="font-title-sm text-title-sm text-on-surface font-bold">Solutions (4)</h3>
+<!-- Solutions List -->
+<div class="flex flex-col gap-4">
+<!-- Solution 1 -->
+<article class="bg-surface-container-lowest border border-black/5 rounded-xl p-card-padding shadow-sm hover:border-primary-container transition-colors">
+<div class="flex gap-4">
+<!-- Pollination Controls -->
+<div class="flex flex-col items-center gap-1 min-w-[40px]">
+<button class="text-green-600 transition-colors">
+<span class="material-symbols-outlined icon-fill text-2xl font-bold">keyboard_arrow_up</span>
+</button>
+<span class="font-title-sm text-title-sm font-bold text-on-surface">89</span>
+<button class="text-zinc-400 hover:text-red-600 transition-colors">
+<span class="material-symbols-outlined text-2xl font-bold">keyboard_arrow_down</span>
+</button>
+</div>
+<div class="flex-1">
+<div class="flex items-center gap-3 mb-3">
+<div class="w-8 h-8 bg-zinc-200 clip-hex overflow-hidden">
+<img alt="User avatar" class="w-full h-full object-cover" data-alt="A portrait of a male student with glasses in a modern university setting, framed by a hexagon. The image has a clean, bright aesthetic suitable for a professional academic network profile picture." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBbKLU4-FKC8yu1Ft8LzURboQdhLUDsTO6Ow-JoBBT28Iv_36Duq77_IIsjT_abm0NdAMc2mwfb4d3OclrhJ0DZ8GAqUQIEzQdA0taS0HKBGFOv4MtFIKe2-Wu5P2wkwb9NMygvgSt_-gEUz_lgQSrXyhUiBfp3QwQYoGvxaswlj2zmWGZdPMpPtGq_FcCkM7J6-nDW83zkYcEUpz95sN2vtR4rDNN4cd2vW0CSmcrhJyvTYjl-0SzVIiwK3QNkkLw1OWEKnXT4ijg"/>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<h4 class="font-title-sm text-title-sm text-on-surface text-sm">David Chen</h4>
+<span class="px-2 py-0.5 bg-green-100 text-green-800 rounded text-[10px] font-bold uppercase tracking-wider flex items-center gap-1">
+<span class="material-symbols-outlined" style="font-size: 12px;">verified</span> TA
+                         </span>
+</div>
+<span class="font-body-sm text-body-sm text-zinc-500 text-xs">1 hour ago</span>
+</div>
+</div>
+<div class="font-body-md text-body-md text-zinc-700">
+<p class="mb-3">You hit the nail on the head with the partitioning part! </p>
+<p class="mb-3">When the array is already sorted, and you consistently pick the last element as the pivot, you are creating the most unbalanced partitions possible. </p>
+<div class="bg-zinc-50 p-4 rounded-lg font-mono text-sm mb-3 border border-zinc-200 text-zinc-800">
+                        Array: [1, 2, 3, 4, 5]<br/>
+                        Pivot: 5<br/>
+                        Partition 1: [1, 2, 3, 4] (size n-1)<br/>
+                        Partition 2: [] (size 0)
+                     </div>
+<p>This means instead of dividing the problem in half (which gives you the <code>log n</code> depth), you are only reducing the problem size by 1 at each recursive step. So you make n recursive calls, and each call does O(n) work to partition. Summing that up: n + (n-1) + (n-2) ... = O(n^2).</p>
+</div>
+</div>
+</div>
+</article>
+<!-- Solution 2 -->
+<article class="bg-surface-container-lowest border border-black/5 rounded-xl p-card-padding shadow-sm hover:border-primary-container transition-colors">
+<div class="flex gap-4">
+<!-- Pollination Controls -->
+<div class="flex flex-col items-center gap-1 min-w-[40px]">
+<button class="text-zinc-400 hover:text-green-600 transition-colors">
+<span class="material-symbols-outlined text-2xl font-bold">keyboard_arrow_up</span>
+</button>
+<span class="font-title-sm text-title-sm font-bold text-on-surface">34</span>
+<button class="text-zinc-400 hover:text-red-600 transition-colors">
+<span class="material-symbols-outlined text-2xl font-bold">keyboard_arrow_down</span>
+</button>
+</div>
+<div class="flex-1">
+<div class="flex items-center gap-3 mb-3">
+<div class="w-8 h-8 bg-zinc-200 clip-hex overflow-hidden">
+<img alt="User avatar" class="w-full h-full object-cover" data-alt="A close-up portrait of a female student smiling warmly, framed within a hexagonal border. Soft, diffused indoor lighting highlights a bright, welcoming user interface style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA6qe3Gn7L2Gbj0917IDa9d1Ct6V9a8rhRCefrYKcj1i_aXfTA4IOd8M8SrbPeCCCmnpfrUgzifVwkKy-Cul6QtLQCa20ircwBAWZE3WXCDBQefTB_2px2fJzA_T2R8CAVMIqe0CgttNSddWXO0RWmRWHv7rY3Ux-OfjSDf2lRYQ-DQN9p2bRx-t_PIFiRx0dyafeVeH_0WhOyL-e24pzaBsVOdoY0yFk-fjmHNumwY10KLgCUKugZvlSdTr3K4aF7iu8XHkcFYE9g"/>
+</div>
+<div>
+<h4 class="font-title-sm text-title-sm text-on-surface text-sm">Sarah Jenkins</h4>
+<span class="font-body-sm text-body-sm text-zinc-500 text-xs">45 mins ago</span>
+</div>
+</div>
+<div class="font-body-md text-body-md text-zinc-700">
+<p>Just to add to what David said, this is exactly why modern implementations of QuickSort rarely use the naive "pick the last element" strategy. </p>
+<p class="mt-2">Usually, people use something like "Median of Three" (picking the median of the first, middle, and last elements) or randomized pivot selection to probabilistically guarantee that you don't hit that O(n^2) worst case on already sorted or reverse-sorted data.</p>
+</div>
+</div>
+</div>
+</article>
+</div>
+</div>
+<!-- Right Sidebar (4 cols - Desktop Only) -->
+<aside class="hidden lg:flex flex-col gap-6 lg:col-span-4">
+<!-- Related Hives Bento Box -->
+<div class="bg-surface-container-lowest border border-black/5 rounded-xl p-card-padding shadow-sm">
+<h3 class="font-title-sm text-title-sm font-bold text-on-surface mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-amber-500">grid_view</span>
+               Related Topics
+            </h3>
+<div class="flex flex-wrap gap-2">
+<a class="px-3 py-1.5 bg-surface border border-zinc-200 rounded-full text-xs font-semibold hover:border-amber-400 transition-colors" href="#">Data Structures</a>
+<a class="px-3 py-1.5 bg-surface border border-zinc-200 rounded-full text-xs font-semibold hover:border-amber-400 transition-colors" href="#">Sorting Algorithms</a>
+<a class="px-3 py-1.5 bg-surface border border-zinc-200 rounded-full text-xs font-semibold hover:border-amber-400 transition-colors" href="#">Big O Notation</a>
+<a class="px-3 py-1.5 bg-surface border border-zinc-200 rounded-full text-xs font-semibold hover:border-amber-400 transition-colors" href="#">CS201</a>
+</div>
+</div>
+<!-- Active Bees -->
+<div class="bg-surface-container-lowest border border-black/5 rounded-xl p-card-padding shadow-sm">
+<h3 class="font-title-sm text-title-sm font-bold text-on-surface mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-amber-500">group</span>
+               Top Contributors Here
+            </h3>
+<ul class="flex flex-col gap-3">
+<li class="flex items-center gap-3">
+<div class="w-8 h-8 bg-zinc-200 clip-hex overflow-hidden">
+<img alt="Avatar" class="w-full h-full object-cover" data-alt="Small hexagonal portrait of a student, clear and bright style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDTp6Pg1S5KuypgoYccV92K9gqrr8IUXlAW-IvDiYZNjBripPtrIHVoGF6Xih4lCdXh-p6OjAQ8ybmtFIS8HtSjiJv_U4ij1WvsncNwau8jo03m-ziJJvWW01uLAfr5T2puvVu9d7UruDEAcUswXQ1m0k72Bfog5XnlQPk0tS1M4VtTujT7NkP1v5O1js_waYuEKetEulT9DdwH78u6yD1RyaaYpMH5lYajDABFfunTcxYlypfoRj4v59IMaTB0maPs0ArHAsp5cVk"/>
+</div>
+<div class="flex-1">
+<p class="font-title-sm text-title-sm text-sm font-bold">David Chen</p>
+<p class="font-body-sm text-body-sm text-xs text-zinc-500">240 Pollen Points</p>
+</div>
+</li>
+<li class="flex items-center gap-3">
+<div class="w-8 h-8 bg-zinc-200 clip-hex overflow-hidden">
+<img alt="Avatar" class="w-full h-full object-cover" data-alt="Small hexagonal portrait of a student, clear and bright style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBnemF_YumIJWy4rEq3fThMzbyAyAhWPXyAjQvypgyP2Uvg87HsiUOdutYmr_aQDNZcWUldWlcXsSMb9xs65dXfsivon9u16FgFOwmgkdn5FIHVa9k_Y2kbSI2W8ALoN9PcfNOZ-Zurb-az65dzHXhElsR7W_G0yCy2IEjm-eaweMKLSNjBAMoEaLP7JB1mwTgfr7rXgOfsRY6vVsizCGBZqUhbAO8epHMR7T1ZvcwbQy7qUXAmhtSkJgkB4zDDO5_lSwjvwCUiHVw"/>
+</div>
+<div class="flex-1">
+<p class="font-title-sm text-title-sm text-sm font-bold">Sarah Jenkins</p>
+<p class="font-body-sm text-body-sm text-xs text-zinc-500">185 Pollen Points</p>
+</div>
+</li>
+</ul>
+</div>
+</aside>
+</div>
+</main>
+</body></html>

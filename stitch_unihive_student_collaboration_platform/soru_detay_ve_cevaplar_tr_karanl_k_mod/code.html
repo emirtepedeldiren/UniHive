@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>UniHive - Question Detail</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+                "surface-container-low": "#1c1b1b",
+                "outline": "#99907b",
+                "tertiary": "#dbffd7",
+                "on-primary-fixed": "#241a00",
+                "inverse-primary": "#735c00",
+                "inverse-on-surface": "#313030",
+                "on-secondary-fixed": "#3f001b",
+                "surface-variant": "#353534",
+                "surface": "#131313",
+                "on-error-container": "#ffdad6",
+                "background": "#131313",
+                "primary-fixed-dim": "#ebc23e",
+                "error-container": "#93000a",
+                "on-primary-fixed-variant": "#574500",
+                "on-secondary-container": "#ff95b4",
+                "surface-container-highest": "#353534",
+                "on-primary-container": "#735c00",
+                "surface-container-high": "#2a2a2a",
+                "on-error": "#690005",
+                "surface-container-lowest": "#0e0e0e",
+                "surface-dim": "#131313",
+                "tertiary-fixed": "#abf4ac",
+                "on-primary": "#3c2f00",
+                "outline-variant": "#4d4634",
+                "on-background": "#e5e2e1",
+                "on-tertiary-fixed-variant": "#07521d",
+                "primary-fixed": "#ffe087",
+                "secondary-container": "#8b0e45",
+                "on-surface-variant": "#d0c6ae",
+                "tertiary-fixed-dim": "#90d792",
+                "tertiary-container": "#a2eaa4",
+                "on-tertiary-fixed": "#002107",
+                "on-secondary-fixed-variant": "#8b0e45",
+                "on-tertiary-container": "#286b33",
+                "surface-tint": "#ebc23e",
+                "primary-container": "#ffd54f",
+                "secondary-fixed": "#ffd9e1",
+                "on-secondary": "#65002f",
+                "on-tertiary": "#003911",
+                "error": "#ffb4ab",
+                "secondary": "#ffb1c5",
+                "primary": "#fff5e1",
+                "on-surface": "#e5e2e1",
+                "surface-container": "#201f1f",
+                "surface-bright": "#393939",
+                "inverse-surface": "#e5e2e1",
+                "secondary-fixed-dim": "#ffb1c5"
+        },
+        "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+        },
+        "spacing": {
+                "base": "8px",
+                "margin": "24px",
+                "sm": "12px",
+                "xl": "64px",
+                "gutter": "20px",
+                "md": "24px",
+                "xs": "4px",
+                "lg": "40px",
+                "margin-desktop": "24px",
+                "unit": "8px",
+                "card-padding": "20px",
+                "margin-mobile": "16px",
+                "container-max": "1200px"
+        },
+        "fontFamily": {
+                "body-md": [
+                        "Plus Jakarta Sans"
+                ],
+                "display-lg": [
+                        "Plus Jakarta Sans"
+                ],
+                "title-sm": [
+                        "Plus Jakarta Sans"
+                ],
+                "headline-md": [
+                        "Plus Jakarta Sans"
+                ],
+                "body-sm": [
+                        "Plus Jakarta Sans"
+                ],
+                "label-caps": [
+                        "Plus Jakarta Sans"
+                ]
+        },
+        "fontSize": {
+                "body-md": [
+                        "16px",
+                        {
+                                "lineHeight": "24px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "display-lg": [
+                        "40px",
+                        {
+                                "lineHeight": "48px",
+                                "letterSpacing": "-0.02em",
+                                "fontWeight": "700"
+                        }
+                ],
+                "title-sm": [
+                        "18px",
+                        {
+                                "lineHeight": "24px",
+                                "fontWeight": "600"
+                        }
+                ],
+                "headline-md": [
+                        "24px",
+                        {
+                                "lineHeight": "32px",
+                                "letterSpacing": "-0.01em",
+                                "fontWeight": "600"
+                        }
+                ],
+                "body-sm": [
+                        "14px",
+                        {
+                                "lineHeight": "20px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "label-caps": [
+                        "12px",
+                        {
+                                "lineHeight": "16px",
+                                "letterSpacing": "0.05em",
+                                "fontWeight": "700"
+                        }
+                ]
+        }
+},
+    },
+  }
+</script>
+<style>
+    .clip-hex {
+      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    .icon-fill {
+      font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+  </style>
+</head>
+<body class="bg-surface text-on-surface font-body-md text-body-md antialiased flex">
+<!-- SideNavBar (Desktop Only) -->
+<nav class="hidden md:flex flex-col h-screen w-64 border-r border-outline-variant bg-surface-container-lowest p-6 fixed left-0 top-0">
+<div class="mb-8">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-primary-container text-on-primary-container flex items-center justify-center clip-hex">
+<span class="material-symbols-outlined icon-fill">hive</span>
+</div>
+<div>
+<h1 class="text-xl font-black text-on-surface tracking-tighter">UniHive</h1>
+<p class="text-xs text-on-surface-variant font-medium">Academic Swarm</p>
+</div>
+</div>
+</div>
+<ul class="flex flex-col gap-2 flex-grow">
+<li>
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg text-on-surface font-bold border-r-4 border-primary-container bg-surface-container hover:bg-surface-container transition-colors duration-200" href="#">
+<span class="material-symbols-outlined icon-fill text-primary-container">home</span>
+<span class="font-title-sm text-title-sm">Ana Sayfa</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">explore</span>
+<span class="font-title-sm text-title-sm">Keşfet</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">notifications</span>
+<span class="font-title-sm text-title-sm">Bildirimler</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">mail</span>
+<span class="font-title-sm text-title-sm">Mesajlar</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">bookmark</span>
+<span class="font-title-sm text-title-sm">Yer İşaretleri</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-title-sm text-title-sm">Profil</span>
+</a>
+</li>
+</ul>
+<button class="mt-8 bg-primary-container text-on-primary-container py-3 px-6 rounded-full font-title-sm text-title-sm hover:-translate-y-1 transition-transform shadow-sm">Gönderi Oluştur</button>
+<div class="mt-auto pt-6 border-t border-outline-variant flex justify-between">
+<a class="text-on-surface-variant hover:text-on-surface flex items-center gap-2" href="#">
+<span class="material-symbols-outlined text-sm">settings</span>
+<span class="font-body-sm text-body-sm">Ayarlar</span>
+</a>
+<a class="text-on-surface-variant hover:text-on-surface flex items-center gap-2" href="#">
+<span class="material-symbols-outlined text-sm">help</span>
+<span class="font-body-sm text-body-sm">Yardım</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 md:ml-64 bg-surface min-h-screen">
+<!-- TopAppBar -->
+<header class="sticky top-0 w-full flex justify-between items-center px-6 py-3 bg-surface-container-lowest/80 backdrop-blur-md border-b border-outline-variant z-40">
+<div class="flex items-center gap-4 w-full max-w-md">
+<!-- Mobile Menu Trigger -->
+<button class="md:hidden text-on-surface-variant">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<!-- Search -->
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface-container border border-outline-variant rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-container focus:border-transparent font-body-sm text-body-sm text-on-surface placeholder:text-on-surface-variant" placeholder="Kovanda ara..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-on-surface-variant hover:text-primary-container transition-colors hidden sm:block">
+<span class="material-symbols-outlined">notifications_none</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary-container transition-colors hidden sm:block">
+<span class="material-symbols-outlined">account_balance_wallet</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary-container transition-colors hidden sm:block">
+<span class="material-symbols-outlined">grid_view</span>
+</button>
+<div class="w-8 h-8 bg-surface-variant clip-hex ml-2 overflow-hidden">
+<img alt="Hexagonal user avatar" class="w-full h-full object-cover" data-alt="A close-up portrait of a young female university student looking focused, placed inside a hexagonal frame. The lighting is soft and natural, contributing to a modern, bright UI aesthetic typical of a social learning platform." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDA7v9TWbd1nM5LaInHIuDHhu576EdZbVFAQlEFB4OKrmZkuSE9g90yabkq7OTFkaaWXHa3ItuwvlXD3lR4ahYy33xzPRqeIEGJVeL7XoKq1I8SiIRrQXSDZQ2ovgdFD2EO-kTy0EcBznY_ygpQqfKM07zigvmMa6Ve744Uw_YYlpdjcZkeF2RYH-RS4EU0nZ-Bw-pld3eafow62OL0STKplaucfa1CzpqGolMtxPIPXMsUdUyIFifrdUGyn-tNtN7Xr9p2Wuylxds"/>
+</div>
+</div>
+</header>
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-8 grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Center Feed (8 cols) -->
+<div class="lg:col-span-8 flex flex-col gap-6">
+<!-- Back Navigation -->
+<a class="flex items-center gap-2 text-on-surface-variant hover:text-on-surface transition-colors w-fit" href="#">
+<span class="material-symbols-outlined text-sm">arrow_back</span>
+<span class="font-body-sm text-body-sm font-semibold">Bilgisayar Bilimleri Kovana Geri Dön</span>
+</a>
+<!-- Original Question Card -->
+<article class="bg-surface-container-lowest border border-outline-variant rounded-xl p-card-padding shadow-sm relative overflow-hidden">
+<!-- Hexagon Watermark -->
+<div class="absolute -right-10 -top-10 text-primary-container/5 pointer-events-none">
+<span class="material-symbols-outlined" style="font-size: 160px; font-variation-settings: 'FILL' 1;">hexagon</span>
+</div>
+<div class="flex gap-4 relative z-10">
+<!-- Pollination Controls -->
+<div class="flex flex-col items-center gap-1 min-w-[40px]">
+<button class="text-on-surface-variant hover:text-primary-container transition-colors">
+<span class="material-symbols-outlined text-2xl font-bold">keyboard_arrow_up</span>
+</button>
+<span class="font-title-sm text-title-sm font-bold text-on-surface">142</span>
+<button class="text-on-surface-variant hover:text-error transition-colors">
+<span class="material-symbols-outlined text-2xl font-bold">keyboard_arrow_down</span>
+</button>
+</div>
+<!-- Content -->
+<div class="flex-1">
+<!-- Author Header -->
+<div class="flex items-center gap-3 mb-4">
+<div class="w-10 h-10 bg-surface-variant clip-hex overflow-hidden">
+<img alt="Author avatar" class="w-full h-full object-cover" data-alt="A portrait of a male university student in a well-lit library, framed within a hexagon. The atmosphere is academic and focused, fitting a modern collaborative study platform with bright, airy lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBLFVY_i-VxoLiH7v8UznvmiczRXiUe8_NQRxUs7liv_aIEc0hBY3zVmYwhLEfVlEKP7mS7g1zPJhCvkzMjFrkEaMRYYg_2e7ivfpw3er5b1czxnkd_Uh6A3rngG-nC-c4DAluOlRr-533Te1RPyOD_UYV6uQ--pVFasbvJjE3aV13rSzcK2UxrSyl5i93-ZfH81mhgRyRVrhHZZ_k8WPkonUvjSFi5TJgbVkzLpocBUSD6ErWWTKK90AXt2yUPDv46V-RMRXdG0GY"/>
+</div>
+<div>
+<h3 class="font-title-sm text-title-sm text-on-surface leading-none">Alex Mercer</h3>
+<span class="font-body-sm text-body-sm text-on-surface-variant">CS201 • 2 hours ago</span>
+</div>
+<div class="ml-auto flex gap-2">
+<span class="px-3 py-1 bg-primary-container/10 text-primary-container rounded-full font-label-caps text-label-caps border border-primary-container/20">#Algoritmalar</span>
+<span class="px-3 py-1 bg-primary-container/10 text-primary-container rounded-full font-label-caps text-label-caps border border-primary-container/20">#Yardım</span>
+</div>
+</div>
+<!-- Question Body -->
+<h2 class="font-headline-md text-headline-md text-on-surface mb-3">Biri QuickSort'un en kötü durum senaryosundaki zaman karmaşıklığını açıklayabilir mi?</h2>
+<p class="font-body-md text-body-md text-on-surface mb-4 whitespace-pre-line">Ortalama durumun O(n log n) olduğunu anlıyorum ancak dizinin zaten sıralı olduğu durumda neden O(n^2)'ye düştüğü konusunda kafam karıştı. 
+
+Pivot seçimi bunu engellemiyor mu? Eğer sıralı bir dizide her zaman son elemanı pivot olarak seçersek, bu diziyi sadece boş bir diziye ve n-1 boyutunda bir diziye mi böler? 
+
+Herhangi bir görsel açıklama çok yardımcı olur. Midtermden önce bunu kafamda netleştirmek istiyorum!</p>
+<!-- Footer Actions -->
+<div class="flex items-center gap-6 mt-6 pt-4 border-t border-outline-variant text-on-surface-variant">
+<button class="flex items-center gap-2 hover:text-primary-container transition-colors group">
+<span class="material-symbols-outlined text-lg group-hover:text-primary-container transition-colors">sync</span>
+<span class="font-body-sm text-body-sm font-semibold">12 Tekrarla</span>
+</button>
+<button class="flex items-center gap-2 hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-lg">chat_bubble_outline</span>
+<span class="font-body-sm text-body-sm font-semibold">4 Yanıt</span>
+</button>
+<button class="flex items-center gap-2 hover:text-on-surface transition-colors ml-auto">
+<span class="material-symbols-outlined text-lg">#Algoritmalar</span>
+<span class="font-body-sm text-body-sm font-semibold">Paylaş</span>
+</button>
+</div>
+</div>
+</div>
+</article>
+<!-- Help this bee (Reply Box) -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-card-padding shadow-sm">
+<div class="flex gap-4">
+<div class="w-10 h-10 bg-surface-variant clip-hex overflow-hidden flex-shrink-0">
+<img alt="Current user avatar" class="w-full h-full object-cover" data-alt="A close-up portrait of a young female university student looking focused, placed inside a hexagonal frame. The lighting is soft and natural, contributing to a modern, bright UI aesthetic typical of a social learning platform." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAhsYKX3oSk6XXXxGQqr3j1APzq9JNt0JnIdYSO4zPAOfBe3EZcuSYS-U_7ilbqZW0hp9Rymvc5zizacDjQlo693wU4vHbPjsFWMrNBHBx_QRiweTk5Gnl5HbxbMXaod5qPUHZ235BHDPfyrIEm3GUYvoug58k16haDaoB-i21Uu--VDH_pfNqImAtHy8StCk0Lv_HZuktq734hmR1Pc_Z3Wz1ZSHyf1hbHkwEuYoXDZlC-1pnM02gaXTb_3JW99QFZVXqbkEeAaoU"/>
+</div>
+<div class="flex-1">
+<textarea class="w-full bg-transparent border-none focus:ring-0 p-0 resize-none font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant border-b-2 border-outline-variant focus:border-primary-container transition-colors rounded-none mb-4" placeholder="Bu arıya yardım et! Bilgini paylaş..." rows="3" style="box-shadow: none;"></textarea>
+<div class="flex justify-between items-center">
+<div class="flex gap-2 text-on-surface-variant">
+<button class="hover:text-primary-container transition-colors p-2 rounded-full hover:bg-surface-container-high">
+<span class="material-symbols-outlined">image</span>
+</button>
+<button class="hover:text-primary-container transition-colors p-2 rounded-full hover:bg-surface-container-high">
+<span class="material-symbols-outlined">code</span>
+</button>
+<button class="hover:text-primary-container transition-colors p-2 rounded-full hover:bg-surface-container-high">
+<span class="material-symbols-outlined">attach_file</span>
+</button>
+</div>
+<button class="bg-primary-container text-on-primary-container py-2 px-6 rounded-full font-title-sm text-title-sm hover:-translate-y-1 transition-transform shadow-sm">Yanıtı Paylaş</button>
+</div>
+</div>
+</div>
+</div>
+<div class="h-px bg-outline-variant w-full my-2"></div>
+<h3 class="font-title-sm text-title-sm text-on-surface font-bold">Çözümler (4)</h3>
+<!-- Solutions List -->
+<div class="flex flex-col gap-4">
+<!-- Solution 1 -->
+<article class="bg-surface-container-lowest border border-outline-variant rounded-xl p-card-padding shadow-sm hover:border-primary-container transition-colors">
+<div class="flex gap-4">
+<!-- Pollination Controls -->
+<div class="flex flex-col items-center gap-1 min-w-[40px]">
+<button class="text-primary-container transition-colors">
+<span class="material-symbols-outlined icon-fill text-2xl font-bold">keyboard_arrow_up</span>
+</button>
+<span class="font-title-sm text-title-sm font-bold text-on-surface">89</span>
+<button class="text-on-surface-variant hover:text-error transition-colors">
+<span class="material-symbols-outlined text-2xl font-bold">keyboard_arrow_down</span>
+</button>
+</div>
+<div class="flex-1">
+<div class="flex items-center gap-3 mb-3">
+<div class="w-8 h-8 bg-surface-variant clip-hex overflow-hidden">
+<img alt="User avatar" class="w-full h-full object-cover" data-alt="A portrait of a male student with glasses in a modern university setting, framed by a hexagon. The image has a clean, bright aesthetic suitable for a professional academic network profile picture." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBbKLU4-FKC8yu1Ft8LzURboQdhLUDsTO6Ow-JoBBT28Iv_36Duq77_IIsjT_abm0NdAMc2mwfb4d3OclrhJ0DZ8GAqUQIEzQdA0taS0HKBGFOv4MtFIKe2-Wu5P2wkwb9NMygvgSt_-gEUz_lgQSrXyhUiBfp3QwQYoGvxaswlj2zmWGZdPMpPtGq_FcCkM7J6-nDW83zkYcEUpz95sN2vtR4rDNN4cd2vW0CSmcrhJyvTYjl-0SzVIiwK3QNkkLw1OWEKnXT4ijg"/>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<h4 class="font-title-sm text-title-sm text-on-surface text-sm">David Chen</h4>
+<span class="px-2 py-0.5 bg-primary-container/20 text-primary-container rounded text-[10px] font-bold uppercase tracking-wider flex items-center gap-1">
+<span class="material-symbols-outlined" style="font-size: 12px;">verified</span> TA
+                         </span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant text-xs">1 hour ago</span>
+</div>
+</div>
+<div class="font-body-md text-body-md text-on-surface">
+<p class="mb-3">You hit the nail on the head with the partitioning part! </p>
+<p class="mb-3">When the array is already sorted, and you consistently pick the last element as the pivot, you are creating the most unbalanced partitions possible. </p>
+<div class="bg-surface-container-high p-4 rounded-lg font-mono text-sm mb-3 border border-outline-variant text-on-surface">
+                        Array: [1, 2, 3, 4, 5]<br/>
+                        Pivot: 5<br/>
+                        Partition 1: [1, 2, 3, 4] (size n-1)<br/>
+                        Partition 2: [] (size 0)
+                     </div>
+<p>This means instead of dividing the problem in half (which gives you the <code>log n</code> depth), you are only reducing the problem size by 1 at each recursive step. So you make n recursive calls, and each call does O(n) work to partition. Summing that up: n + (n-1) + (n-2) ... = O(n^2).</p>
+</div>
+</div>
+</div>
+</article>
+<!-- Solution 2 -->
+<article class="bg-surface-container-lowest border border-outline-variant rounded-xl p-card-padding shadow-sm hover:border-primary-container transition-colors">
+<div class="flex gap-4">
+<!-- Pollination Controls -->
+<div class="flex flex-col items-center gap-1 min-w-[40px]">
+<button class="text-on-surface-variant hover:text-primary-container transition-colors">
+<span class="material-symbols-outlined text-2xl font-bold">keyboard_arrow_up</span>
+</button>
+<span class="font-title-sm text-title-sm font-bold text-on-surface">34</span>
+<button class="text-on-surface-variant hover:text-error transition-colors">
+<span class="material-symbols-outlined text-2xl font-bold">keyboard_arrow_down</span>
+</button>
+</div>
+<div class="flex-1">
+<div class="flex items-center gap-3 mb-3">
+<div class="w-8 h-8 bg-surface-variant clip-hex overflow-hidden">
+<img alt="User avatar" class="w-full h-full object-cover" data-alt="A close-up portrait of a female student smiling warmly, framed within a hexagonal border. Soft, diffused indoor lighting highlights a bright, welcoming user interface style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA6qe3Gn7L2Gbj0917IDa9d1Ct6V9a8rhRCefrYKcj1i_aXfTA4IOd8M8SrbPeCCCmnpfrUgzifVwkKy-Cul6QtLQCa20ircwBAWZE3WXCDBQefTB_2px2fJzA_T2R8CAVMIqe0CgttNSddWXO0RWmRWHv7rY3Ux-OfjSDf2lRYQ-DQN9p2bRx-t_PIFiRx0dyafeVeH_0WhOyL-e24pzaBsVOdoY0yFk-fjmHNumwY10KLgCUKugZvlSdTr3K4aF7iu8XHkcFYE9g"/>
+</div>
+<div>
+<h4 class="font-title-sm text-title-sm text-on-surface text-sm">Sarah Jenkins</h4>
+<span class="font-body-sm text-body-sm text-on-surface-variant text-xs">45 mins ago</span>
+</div>
+</div>
+<div class="font-body-md text-body-md text-on-surface">
+<p>Bölümleme (partitioning) kısmıyla tam üzerine bastın!</p>
+<p class="mt-2">Dizi zaten sıralı olduğunda ve sürekli son elemanı pivot olarak seçtiğinizde, mümkün olan en dengesiz bölümleri oluşturursunuz.</p>
+</div>
+</div>
+</div>
+</article>
+</div>
+</div>
+<!-- Right Sidebar (4 cols - Desktop Only) -->
+<aside class="hidden lg:flex flex-col gap-6 lg:col-span-4">
+<!-- Related Hives Bento Box -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-card-padding shadow-sm">
+<h3 class="font-title-sm text-title-sm font-bold text-on-surface mb-4 flex items-center gap-2"><span class="material-symbols-outlined text-primary-container">grid_view</span> İlgili Konular</h3>
+<div class="flex flex-wrap gap-2">
+<a class="px-3 py-1.5 bg-surface-container border border-outline-variant rounded-full text-xs font-semibold text-on-surface hover:border-primary-container hover:text-primary-container transition-colors" href="#">Veri Yapıları</a>
+<a class="px-3 py-1.5 bg-surface-container border border-outline-variant rounded-full text-xs font-semibold text-on-surface hover:border-primary-container hover:text-primary-container transition-colors" href="#">Sıralama Algoritmaları</a>
+<a class="px-3 py-1.5 bg-surface-container border border-outline-variant rounded-full text-xs font-semibold text-on-surface hover:border-primary-container hover:text-primary-container transition-colors" href="#">Big O Gösterimi</a>
+<a class="px-3 py-1.5 bg-surface-container border border-outline-variant rounded-full text-xs font-semibold text-on-surface hover:border-primary-container hover:text-primary-container transition-colors" href="#">CS201</a>
+</div>
+</div>
+<!-- Active Bees -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-card-padding shadow-sm">
+<h3 class="font-title-sm text-title-sm font-bold text-on-surface mb-4 flex items-center gap-2"><span class="material-symbols-outlined text-primary-container">group</span> En Çok Katkı Sağlayanlar</h3>
+<ul class="flex flex-col gap-3">
+<li class="flex items-center gap-3">
+<div class="w-8 h-8 bg-surface-variant clip-hex overflow-hidden">
+<img alt="Avatar" class="w-full h-full object-cover" data-alt="Small hexagonal portrait of a student, clear and bright style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDTp6Pg1S5KuypgoYccV92K9gqrr8IUXlAW-IvDiYZNjBripPtrIHVoGF6Xih4lCdXh-p6OjAQ8ybmtFIS8HtSjiJv_U4ij1WvsncNwau8jo03m-ziJJvWW01uLAfr5T2puvVu9d7UruDEAcUswXQ1m0k72Bfog5XnlQPk0tS1M4VtTujT7NkP1v5O1js_waYuEKetEulT9DdwH78u6yD1RyaaYpMH5lYajDABFfunTcxYlypfoRj4v59IMaTB0maPs0ArHAsp5cVk"/>
+</div>
+<div class="flex-1">
+<p class="font-title-sm text-title-sm text-sm font-bold text-on-surface">David Chen</p>
+<p class="font-body-sm text-body-sm text-xs text-on-surface-variant">240 Polen Puanı</p>
+</div>
+</li>
+<li class="flex items-center gap-3">
+<div class="w-8 h-8 bg-surface-variant clip-hex overflow-hidden">
+<img alt="Avatar" class="w-full h-full object-cover" data-alt="Small hexagonal portrait of a student, clear and bright style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBnemF_YumIJWy4rEq3fThMzbyAyAhWPXyAjQvypgyP2Uvg87HsiUOdutYmr_aQDNZcWUldWlcXsSMb9xs65dXfsivon9u16FgFOwmgkdn5FIHVa9k_Y2kbSI2W8ALoN9PcfNOZ-Zurb-az65dzHXhElsR7W_G0yCy2IEjm-eaweMKLSNjBAMoEaLP7JB1mwTgfr7rXgOfsRY6vVsizCGBZqUhbAO8epHMR7T1ZvcwbQy7qUXAmhtSkJgkB4zDDO5_lSwjvwCUiHVw"/>
+</div>
+<div class="flex-1">
+<p class="font-title-sm text-title-sm text-sm font-bold text-on-surface">Sarah Jenkins</p>
+<p class="font-body-sm text-body-sm text-xs text-on-surface-variant">185 Polen Puanı</p>
+</div>
+</li>
+</ul>
+</div>
+</aside>
+</div>
+</main>
+</body></html>
