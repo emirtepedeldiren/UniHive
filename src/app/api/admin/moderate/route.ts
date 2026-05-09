@@ -13,7 +13,7 @@ const POINTS = {
 
 export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions);
-  if (!session?.user || (session.user as any).role !== "ADMIN") {
+  if (!session?.user || session.user.role !== "ADMIN") {
     return NextResponse.json({ message: "Yetkisiz." }, { status: 403 });
   }
 

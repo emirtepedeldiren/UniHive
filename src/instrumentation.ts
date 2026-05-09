@@ -2,64 +2,34 @@
 // Fixes the broken localStorage mock injected by Node.js --localstorage-file flag
 // (used by some tools) which creates a localStorage object where getItem is not a function.
 
+type GlobalWithStorage = typeof globalThis & {
+  localStorage?: Storage | null;
+  sessionStorage?: Storage | null;
+};
+
+function makeMockStorage(): Storage {
+  const store: Record<string, string> = {};
+  return {
+    getItem: (key: string) => store[key] ?? null,
+    setItem: (key: string, value: string) => { store[key] = value; },
+    removeItem: (key: string) => { delete store[key]; },
+    clear: () => { Object.keys(store).forEach((k) => delete store[k]); },
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    key: (_index: number) => null,
+    get length() { return Object.keys(store).length; },
+  };
+}
+
 export async function register() {
   if (process.env.NEXT_RUNTIME === "nodejs") {
-    const g = global as any;
+    const g = globalThis as GlobalWithStorage;
 
-    // If localStorage exists but is broken (getItem not a function), replace it
-    if (
-      g.localStorage !== undefined &&
-      typeof g.localStorage.getItem !== "function"
-    ) {
-      g.localStorage = {
-        _store: {} as Record<string, string>,
-        getItem(key: string) {
-          return this._store[key] ?? null;
-        },
-        setItem(key: string, value: string) {
-          this._store[key] = value;
-        },
-        removeItem(key: string) {
-          delete this._store[key];
-        },
-        clear() {
-          this._store = {};
-        },
-        key(_index: number) {
-          return null;
-        },
-        get length() {
-          return Object.keys(this._store).length;
-        },
-      };
+    if (g.localStorage !== undefined && g.localStorage !== null && typeof g.localStorage.getItem !== "function") {
+      g.localStorage = makeMockStorage();
     }
 
-    // Also polyfill sessionStorage if broken
-    if (
-      g.sessionStorage !== undefined &&
-      typeof g.sessionStorage.getItem !== "function"
-    ) {
-      g.sessionStorage = {
-        _store: {} as Record<string, string>,
-        getItem(key: string) {
-          return this._store[key] ?? null;
-        },
-        setItem(key: string, value: string) {
-          this._store[key] = value;
-        },
-        removeItem(key: string) {
-          delete this._store[key];
-        },
-        clear() {
-          this._store = {};
-        },
-        key(_index: number) {
-          return null;
-        },
-        get length() {
-          return Object.keys(this._store).length;
-        },
-      };
+    if (g.sessionStorage !== undefined && g.sessionStorage !== null && typeof g.sessionStorage.getItem !== "function") {
+      g.sessionStorage = makeMockStorage();
     }
   }
 }

@@ -1,14 +1,23 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 
 export default function TopBar() {
   const [query, setQuery] = useState("");
+  const [unreadCount, setUnreadCount] = useState(0);
   const router = useRouter();
   const { data: session } = useSession();
-  const user = session?.user as any;
+  const user = session?.user as { id?: string; name?: string; email?: string } | undefined;
+
+  useEffect(() => {
+    if (!session) return;
+    fetch("/api/notifications?unread=true")
+      .then((r) => r.json())
+      .then((data: { count?: number }) => setUnreadCount(data.count ?? 0))
+      .catch(() => {});
+  }, [session]);
 
   function handleSearch(e: React.FormEvent) {
     e.preventDefault();
@@ -37,11 +46,20 @@ export default function TopBar() {
 
       <div className="flex items-center gap-1 ml-auto">
         {/* Notifications */}
-        <Link href="/notifications" id="topbar-notifications" className="w-9 h-9 rounded-full flex items-center justify-center text-app-muted hover:bg-app-hover dark:hover:bg-dark-hover transition-colors">
+        <Link
+          href="/notifications"
+          id="topbar-notifications"
+          className="relative w-9 h-9 rounded-full flex items-center justify-center text-app-muted hover:bg-app-hover dark:hover:bg-dark-hover transition-colors"
+        >
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
             <path d="M13.73 21a2 2 0 0 1-3.46 0" />
           </svg>
+          {unreadCount > 0 && (
+            <span className="absolute -top-0.5 -right-0.5 min-w-[16px] h-4 bg-sting text-white text-[9px] font-bold rounded-full flex items-center justify-center px-0.5">
+              {unreadCount > 9 ? "9+" : unreadCount}
+            </span>
+          )}
         </Link>
 
         {/* Bookmarks */}

@@ -3,6 +3,33 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 
+declare module "next-auth" {
+  interface User {
+    role: string;
+    score: number;
+    badge: string;
+  }
+  interface Session {
+    user: {
+      id: string;
+      name?: string | null;
+      email?: string | null;
+      role: string;
+      score: number;
+      badge: string;
+    };
+  }
+}
+
+declare module "next-auth/jwt" {
+  interface JWT {
+    id?: string;
+    role?: string;
+    score?: number;
+    badge?: string;
+  }
+}
+
 export const authOptions: NextAuthOptions = {
   session: {
     strategy: "jwt",
@@ -48,18 +75,18 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
-        token.role = (user as any).role;
-        token.score = (user as any).score;
-        token.badge = (user as any).badge;
+        token.role = user.role;
+        token.score = user.score;
+        token.badge = user.badge;
       }
       return token;
     },
     async session({ session, token }) {
       if (token && session.user) {
-        (session.user as any).id = token.id as string;
-        (session.user as any).role = token.role;
-        (session.user as any).score = token.score;
-        (session.user as any).badge = token.badge;
+        session.user.id = token.id as string;
+        session.user.role = token.role as string;
+        session.user.score = token.score as number;
+        session.user.badge = token.badge as string;
       }
       return session;
     },

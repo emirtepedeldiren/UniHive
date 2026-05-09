@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ message: "Giriş yapmalısınız." }, { status: 401 });
   }
 
-  const userId = (session.user as any).id as string;
+  const userId = session.user.id;
   const { questionId, body, imageUrls } = await req.json();
 
   if (!questionId || !body?.trim()) {
@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
       questionId,
       userId,
       body: body.trim(),
-      imageUrls: JSON.stringify(Array.isArray(imageUrls) ? imageUrls.slice(0, 3) : []),
+      imageUrls: Array.isArray(imageUrls) ? imageUrls.slice(0, 3) : [],
       status: "PENDING",
     },
   });

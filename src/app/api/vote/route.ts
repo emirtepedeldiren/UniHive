@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
   }
 
   const { targetId, targetType, value } = await req.json();
-  const userId = (session.user as any).id as string;
+  const userId = session.user.id;
 
   if (!["question", "answer"].includes(targetType)) {
     return NextResponse.json(

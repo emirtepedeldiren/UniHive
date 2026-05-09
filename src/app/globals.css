@@ -142,6 +142,16 @@ body {
   .badge-pending { @apply bg-yellow-100 text-yellow-800 text-xs font-bold px-2 py-0.5 rounded-full; }
   .badge-approved { @apply bg-green-100 text-green-800 text-xs font-bold px-2 py-0.5 rounded-full; }
   .badge-rejected { @apply bg-red-100 text-red-800 text-xs font-bold px-2 py-0.5 rounded-full; }
+  .status-pending { @apply bg-yellow-100 text-yellow-800 text-xs font-bold px-2 py-0.5 rounded-full; }
+  .status-approved { @apply bg-green-100 text-green-800 text-xs font-bold px-2 py-0.5 rounded-full; }
+  .status-rejected { @apply bg-red-100 text-red-800 text-xs font-bold px-2 py-0.5 rounded-full; }
+
+  /* Hive card (formal card from design system) */
+  .hive-card {
+    @apply bg-white border border-app-border rounded-xl p-5 transition-all duration-150;
+  }
+  .hive-card:hover { @apply shadow-card; }
+  .dark .hive-card { @apply bg-dark-card border-dark-border; }
 }
 
 /* ─── Animations ─── */
@@ -149,4 +159,9 @@ body {
   from { opacity: 0; transform: translateY(6px); }
   to   { opacity: 1; transform: translateY(0); }
 }
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
 .animate-fade-up { animation: fadeUp 0.25s ease-out; }
+.animate-fade-in { animation: fadeIn 0.3s ease-out; }

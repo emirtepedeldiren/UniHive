@@ -1,17 +1,20 @@
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import HexAvatar from "./HexAvatar";
 import CommunityChip from "./CommunityChip";
 import Pollinate from "./Pollinate";
-import { parseJsonArray, timeAgo } from "@/lib/utils";
+import BookmarkButton from "./BookmarkButton";
+import ShareButton from "./ShareButton";
+import { timeAgo } from "@/lib/utils";
 
 interface HiveCardProps {
   question: {
     id: string;
     title: string;
     body?: string | null;
-    tags: string;
-    imageUrls: string;
+    tags: string[];
+    imageUrls: string[];
     voteScore: number;
     isResolved: boolean;
     createdAt: Date | string;
@@ -26,16 +29,20 @@ interface HiveCardProps {
     };
   };
   userVote?: number;
+  userBookmarked?: boolean;
   showStatus?: boolean;
+  showBookmark?: boolean;
 }
 
 export default function HiveCard({
   question,
   userVote = 0,
+  userBookmarked = false,
   showStatus = false,
+  showBookmark = false,
 }: HiveCardProps) {
-  const tags = parseJsonArray(question.tags);
-  const images = parseJsonArray(question.imageUrls);
+  const tags = question.tags;
+  const images = question.imageUrls;
 
   return (
     <article
@@ -95,7 +102,7 @@ export default function HiveCard({
         <Link href={`/questions/${question.id}`} className="group">
           <h2 className="title-sm text-hive-black group-hover:text-primary transition-colors mb-2 line-clamp-2">
             {question.isResolved && (
-              <span className="inline-flex items-center gap-1 text-pollen-green text-xs font-bold mr-2 align-middle">
+              <span className="inline-flex items-center gap-1 text-pollinate text-xs font-bold mr-2 align-middle">
                 ✓ Çözüldü
               </span>
             )}
@@ -114,11 +121,13 @@ export default function HiveCard({
         {images.length > 0 && (
           <div className="flex gap-2 mb-3">
             {images.slice(0, 3).map((url, i) => (
-              <img
+              <Image
                 key={i}
                 src={url}
                 alt={`Görsel ${i + 1}`}
-                className="w-20 h-20 object-cover rounded-md border border-outline-variant"
+                width={80}
+                height={80}
+                className="object-cover rounded-md border border-outline-variant"
               />
             ))}
           </div>
@@ -129,19 +138,25 @@ export default function HiveCard({
           {tags.map((tag) => (
             <CommunityChip key={tag} tag={tag} />
           ))}
-          <span className="ml-auto label-caps text-on-surface-variant flex items-center gap-1">
-            <svg
-              width="12"
-              height="12"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-            </svg>
-            {question._count?.answers ?? 0} cevap
-          </span>
+          <div className="ml-auto flex items-center gap-3">
+            <span className="label-caps text-on-surface-variant flex items-center gap-1">
+              <svg
+                width="12"
+                height="12"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+              </svg>
+              {question._count?.answers ?? 0} cevap
+            </span>
+            <ShareButton path={`/questions/${question.id}`} title={question.title} />
+            {showBookmark && (
+              <BookmarkButton questionId={question.id} initialBookmarked={userBookmarked} />
+            )}
+          </div>
         </div>
       </div>
     </article>

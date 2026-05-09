@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ message: "Giriş yapmalısınız." }, { status: 401 });
   }
 
-  const userId = (session.user as any).id as string;
+  const userId = session.user.id;
   const { answerId, questionId } = await req.json();
 
   // Verify the user owns the question
