@@ -1,9 +1,10 @@
 import React from "react";
-import { BADGE_EMOJI } from "@/lib/utils";
+import Image from "next/image";
 
 interface HexAvatarProps {
   name?: string | null;
   badge?: string;
+  avatarUrl?: string | null;
   size?: "sm" | "md" | "lg";
   className?: string;
 }
@@ -17,6 +18,7 @@ const SIZE_MAP = {
 export default function HexAvatar({
   name,
   badge = "Drone",
+  avatarUrl,
   size = "md",
   className = "",
 }: HexAvatarProps) {
@@ -34,10 +36,14 @@ export default function HexAvatar({
   return (
     <div className={`relative flex-shrink-0 ${outer} ${className}`}>
       <div
-        className={`hex-clip w-full h-full flex items-center justify-center font-bold ${text} bg-honey text-hive-black`}
+        className={`hex-clip w-full h-full flex items-center justify-center font-bold ${text} bg-honey text-hive-black overflow-hidden`}
         title={`${name ?? "User"} — ${badge}`}
       >
-        {BADGE_EMOJI[badge] ?? initials}
+        {avatarUrl ? (
+          <Image src={avatarUrl} alt={name ?? "avatar"} width={56} height={56} className="w-full h-full object-cover" />
+        ) : (
+          initials
+        )}
       </div>
     </div>
   );

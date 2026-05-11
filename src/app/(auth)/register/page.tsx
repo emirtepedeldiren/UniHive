@@ -144,11 +144,10 @@ export default function RegisterPage() {
             <div>
               <label className="block text-sm font-semibold mb-1.5 text-app-text dark:text-dark-text">Ülke</label>
               <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-app-muted">🌍</span>
                 <select
                   value={country}
                   onChange={(e) => setCountry(e.target.value)}
-                  className="w-full bg-transparent border border-gray-300 dark:border-gray-700 rounded-md pl-10 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-honey appearance-none text-app-text dark:text-dark-text"
+                  className="w-full bg-transparent border border-gray-300 dark:border-gray-700 rounded-md px-4 pr-8 py-3 focus:outline-none focus:ring-2 focus:ring-honey appearance-none text-app-text dark:text-dark-text"
                 >
                   <option value="" disabled>Ülke seç...</option>
                   {COUNTRIES.map((c) => (
@@ -162,11 +161,10 @@ export default function RegisterPage() {
             <div>
               <label className="block text-sm font-semibold mb-1.5 text-app-text dark:text-dark-text">Üniversite</label>
               <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-app-muted">🏛</span>
                 <select
                   value={university}
                   onChange={(e) => setUniversity(e.target.value)}
-                  className="w-full bg-transparent border border-gray-300 dark:border-gray-700 rounded-md pl-10 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-honey appearance-none text-app-text dark:text-dark-text"
+                  className="w-full bg-transparent border border-gray-300 dark:border-gray-700 rounded-md px-4 pr-8 py-3 focus:outline-none focus:ring-2 focus:ring-honey appearance-none text-app-text dark:text-dark-text"
                 >
                   <option value="" disabled>Üniversite seç...</option>
                   {UNIVERSITIES.map((u) => (
@@ -180,11 +178,10 @@ export default function RegisterPage() {
             <div>
               <label className="block text-sm font-semibold mb-1.5 text-app-text dark:text-dark-text">Bölüm / Uzmanlık</label>
               <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-app-muted">🎓</span>
                 <select
                   value={department}
                   onChange={(e) => setDepartment(e.target.value)}
-                  className="w-full bg-transparent border border-gray-300 dark:border-gray-700 rounded-md pl-10 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-honey appearance-none text-app-text dark:text-dark-text"
+                  className="w-full bg-transparent border border-gray-300 dark:border-gray-700 rounded-md px-4 pr-8 py-3 focus:outline-none focus:ring-2 focus:ring-honey appearance-none text-app-text dark:text-dark-text"
                 >
                   <option value="" disabled>Bölüm seç...</option>
                   {DEPARTMENTS.map((d) => (

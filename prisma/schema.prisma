@@ -14,24 +14,28 @@ datasource db {
 // Status: "PENDING" | "APPROVED" | "REJECTED"
 
 model User {
-  id            String         @id @default(cuid())
-  email         String         @unique
-  name          String?
-  passwordHash  String
-  role          String         @default("USER")
-  country       String?
-  university    String
-  department    String?
-  score         Int            @default(0)
-  badge         String         @default("Drone")
-  emailVerified Boolean        @default(false)
-  questions     Question[]
-  answers       Answer[]
-  votes         Vote[]
-  notifications Notification[]
-  bookmarks     Bookmark[]
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
+  id             String         @id @default(cuid())
+  email          String         @unique
+  name           String?
+  passwordHash   String
+  role           String         @default("USER")
+  country        String?
+  university     String
+  department     String?
+  score          Int            @default(0)
+  badge          String         @default("Drone")
+  emailVerified  Boolean        @default(false)
+  avatarUrl      String?
+  bio            String?
+  questions      Question[]
+  answers        Answer[]
+  votes          Vote[]
+  notifications  Notification[]
+  bookmarks      Bookmark[]
+  conversations  Conversation[] @relation("ConversationParticipants")
+  sentMessages   Message[]
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
 }
 
 model Question {
@@ -107,4 +111,23 @@ model Notification {
   isRead    Boolean  @default(false)
   user      User     @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
+}
+
+model Conversation {
+  id           String    @id @default(cuid())
+  participants User[]    @relation("ConversationParticipants")
+  messages     Message[]
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+model Message {
+  id             String       @id @default(cuid())
+  conversationId String
+  senderId       String
+  body           String
+  isRead         Boolean      @default(false)
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  sender         User         @relation(fields: [senderId], references: [id])
+  createdAt      DateTime     @default(now())
 }

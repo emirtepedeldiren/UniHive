@@ -19,14 +19,14 @@ export default async function HomePage({ searchParams }: PageProps) {
 
   const where: {
     status: string;
-    OR?: { title?: { contains: string }; body?: { contains: string } }[];
+    OR?: { title?: { contains: string; mode: "insensitive" }; body?: { contains: string; mode: "insensitive" } }[];
     tags?: { has: string };
   } = { status: "APPROVED" };
 
   if (q) {
     where.OR = [
-      { title: { contains: q } },
-      { body: { contains: q } },
+      { title: { contains: q, mode: "insensitive" } },
+      { body: { contains: q, mode: "insensitive" } },
     ];
   }
   if (tag) {

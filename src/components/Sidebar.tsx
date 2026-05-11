@@ -3,8 +3,9 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { useSession, signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import logoImage from "../../design_assets/stitch_unihive_student_collaboration_platform/unihive_logo/screen.png";
+import logoTransparent from "../../public/logo-transparent.png";
 
 const NAV_ITEMS = [
   {
@@ -58,29 +59,6 @@ const NAV_ITEMS = [
   },
 ];
 
-const BOTTOM_ITEMS = [
-  {
-    href: "/settings",
-    label: "Ayarlar",
-    icon: (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="12" cy="12" r="3" />
-        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
-      </svg>
-    ),
-  },
-  {
-    href: "/help",
-    label: "Yardım",
-    icon: (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="12" cy="12" r="10" />
-        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
-        <line x1="12" y1="17" x2="12.01" y2="17" />
-      </svg>
-    ),
-  },
-];
 
 export default function Sidebar() {
   const pathname = usePathname();
@@ -90,14 +68,21 @@ export default function Sidebar() {
   return (
     <aside className="sidebar">
       {/* Logo */}
-      <div className="px-5 py-5 border-b border-app-border dark:border-dark-border">
-        <Link href="/" className="block w-44 ml-2">
-          <Image 
-            src={logoImage} 
-            alt="UniHive Logo" 
-            width={176} 
-            height={70} 
-            className="w-full h-auto object-contain mix-blend-multiply dark:mix-blend-normal dark:bg-white dark:rounded-xl dark:p-1" 
+      <div className="px-4 py-2 border-b border-app-border dark:border-dark-border">
+        <Link href="/" className="block w-[140px]">
+          <Image
+            src={logoImage}
+            alt="UniHive Logo"
+            width={140}
+            height={56}
+            className="w-full h-auto object-contain mix-blend-multiply dark:hidden"
+          />
+          <Image
+            src={logoTransparent}
+            alt="UniHive Logo"
+            width={140}
+            height={56}
+            className="w-full h-auto object-contain hidden dark:block"
           />
         </Link>
       </div>
@@ -154,33 +139,8 @@ export default function Sidebar() {
         )}
       </nav>
 
-      {/* Bottom */}
-      <div className="border-t border-app-border dark:border-dark-border py-3">
-        {BOTTOM_ITEMS.map((item) => (
-          <Link
-            key={item.href}
-            href={item.href}
-            className="nav-item text-sm"
-          >
-            {item.icon}
-            {item.label}
-          </Link>
-        ))}
-
-        {session ? (
-          <button
-            id="signout-sidebar-btn"
-            onClick={() => signOut({ callbackUrl: "/login" })}
-            className="nav-item text-sm text-sting w-full text-left"
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-              <polyline points="16 17 21 12 16 7" />
-              <line x1="21" y1="12" x2="9" y2="12" />
-            </svg>
-            Çıkış Yap
-          </button>
-        ) : (
+      {!session && (
+        <div className="border-t border-app-border dark:border-dark-border py-3">
           <Link href="/login" className="nav-item text-sm font-semibold text-honey">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
@@ -189,8 +149,8 @@ export default function Sidebar() {
             </svg>
             Giriş Yap
           </Link>
-        )}
-      </div>
+        </div>
+      )}
     </aside>
   );
 }

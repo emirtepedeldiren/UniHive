@@ -1,6 +1,7 @@
 import React from "react";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
@@ -94,13 +95,17 @@ export default async function ProfilePage({ params, searchParams }: PageProps) {
         <div className="flex items-start gap-6">
           {/* Hex avatar */}
           <div className="relative flex-shrink-0">
-            <div className="w-20 h-20 hex-clip bg-honey flex items-center justify-center">
-              <span className="font-extrabold text-3xl text-hive-black">
-                {(user.name || user.email || "?").charAt(0).toUpperCase()}
-              </span>
+            <div className="w-20 h-20 hex-clip bg-honey flex items-center justify-center overflow-hidden">
+              {user.avatarUrl ? (
+                <Image src={user.avatarUrl} alt={user.name ?? "avatar"} width={80} height={80} className="w-full h-full object-cover" />
+              ) : (
+                <span className="font-extrabold text-3xl text-hive-black">
+                  {(user.name || user.email || "?").charAt(0).toUpperCase()}
+                </span>
+              )}
             </div>
             <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 bg-honey text-hive-black text-[10px] font-bold px-2 py-0.5 rounded-full whitespace-nowrap shadow-sm">
-              🪙 {user.score} HP
+              {user.score} HP
             </div>
           </div>
 
@@ -119,19 +124,24 @@ export default async function ProfilePage({ params, searchParams }: PageProps) {
               </div>
 
               <div className="flex items-center gap-2">
-                {isOwn && (
+                {isOwn ? (
                   <Link href="/settings" className="btn-outline text-sm" id="edit-profile-btn">
                     Profili Düzenle
                   </Link>
+                ) : (
+                  currentUserId && (
+                    <Link href={`/messages?with=${id}`} className="btn-primary text-sm" id="send-message-btn">
+                      Mesaj Gönder
+                    </Link>
+                  )
                 )}
-                <button className="w-8 h-8 flex items-center justify-center rounded-full border border-app-border dark:border-dark-border hover:bg-app-hover dark:hover:bg-dark-hover transition-colors text-app-muted">
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <circle cx="18" cy="5" r="3" /><circle cx="6" cy="12" r="3" /><circle cx="18" cy="19" r="3" />
-                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" /><line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
-                  </svg>
-                </button>
               </div>
             </div>
+
+            {/* Bio */}
+            {user.bio && (
+              <p className="text-sm text-app-muted dark:text-dark-muted mt-2 leading-relaxed">{user.bio}</p>
+            )}
 
             {/* Badge chip */}
             <div className="flex items-center gap-2 mt-3">

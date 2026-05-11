@@ -11,11 +11,13 @@ export async function PATCH(req: NextRequest) {
   const userId = (session.user as { id: string }).id;
 
   const body = await req.json();
-  const { name, university, department, country } = body as {
+  const { name, university, department, country, avatarUrl, bio } = body as {
     name?: string;
     university?: string;
     department?: string;
     country?: string;
+    avatarUrl?: string;
+    bio?: string;
   };
 
   const updated = await prisma.user.update({
@@ -25,8 +27,10 @@ export async function PATCH(req: NextRequest) {
       ...(university !== undefined && { university: university.trim() }),
       ...(department !== undefined && { department: department.trim() || null }),
       ...(country !== undefined && { country: country.trim() || null }),
+      ...(avatarUrl !== undefined && { avatarUrl: avatarUrl.trim() || null }),
+      ...(bio !== undefined && { bio: bio.trim().slice(0, 200) || null }),
     },
-    select: { id: true, name: true, university: true, department: true, country: true },
+    select: { id: true, name: true, university: true, department: true, country: true, avatarUrl: true, bio: true },
   });
 
   return NextResponse.json(updated);

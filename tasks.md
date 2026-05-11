@@ -2,23 +2,23 @@
 
 ## P0 · Kırık Linkler
 
-- [ ] `/notifications` sayfası oluştur (Sidebar + TopBar'da linklenmiş, 404 veriyor)
-- [ ] `/bookmarks` sayfası oluştur (Sidebar + TopBar'da linklenmiş, 404 veriyor)
-- [ ] `/messages` sayfası oluştur (Sidebar'da linklenmiş, 404 veriyor)
-- [ ] `/settings` sayfası oluştur (Sidebar'da linklenmiş, 404 veriyor)
-- [ ] `/help` sayfası oluştur (Sidebar'da linklenmiş, 404 veriyor)
+- [x] `/notifications` sayfası oluştur (Sidebar + TopBar'da linklenmiş, 404 veriyor)
+- [x] `/bookmarks` sayfası oluştur (Sidebar + TopBar'da linklenmiş, 404 veriyor)
+- [x] `/messages` sayfası oluştur — mesajlaşma sistemi tam olarak uygulandı
+- [x] `/settings` sayfası oluştur (avatar + bio desteğiyle)
+- [x] `/help` sayfası oluştur
 
 ## P1 · Eksik İşlevsellik
 
-- [ ] Profil düzenleme — `profile/[id]/page.tsx` içindeki "Profili Düzenle" butonuna handler ve sayfa/modal ekle
+- [x] Profil düzenleme — avatar yükleme, biyografi, profil bilgileri düzenleme eklendi
 - [ ] Re-hive (paylaşım) — `HiveCard.tsx` içindeki Share/Re-hive butonuna işlevsellik ekle; gerekirse DB modeli ekle
 - [ ] Compose box ekleri — Ana sayfadaki compose kutusundaki foto/grafik/ek butonlarını işlevsel yap
-- [ ] Yer işaretleri (Bookmark) — `prisma/schema.prisma`'ya `Bookmark` modeli ekle, API route yaz, profil "Kaydedilenler" sekmesini ve `/bookmarks` sayfasını gerçek veriyle doldur
+- [x] Yer işaretleri (Bookmark) — model + API + UI tamamlandı
 
 ## P2 · Veri Kalitesi
 
 - [ ] Sağ sidebar "İlgili Konular" ve "Katkıda Bulunanlar" — statik dummy veriden API'ye taşı
-- [ ] Bildirim sayacı — TopBar zil ikonuna `Notification` tablosundan okunmamış sayı çek ve göster
+- [x] Bildirim sayacı — TopBar zil ikonuna `Notification` tablosundan okunmamış sayı çekiliyor
 - [ ] `/hives` sayfası — `explore/page.tsx` içindeki "Tümünü Gör" linki bu sayfaya gidiyor; oluştur
 
 ## P3 · Teknik Borç
@@ -32,5 +32,8 @@
 ## P4 · Yeni Özellikler
 
 - [ ] Gerçek zamanlı bildirimler — WebSocket veya polling ile anlık bildirim akışı
-- [ ] Dark mode tamamlanması — Token'lar `tailwind.config.ts`'de tanımlı; eksik kalan sayfa ve bileşenlerde `dark:` class'larını tamamla
-- [ ] Tam metin arama — TopBar arama şu an sadece `/?q=` ile başlık filtresi yapıyor; PostgreSQL `ILIKE` veya full-text search ile genişlet
+- [x] Dark mode tamamlanması — Token'lar `tailwind.config.ts`'de tanımlı; tüm sayfalarda `dark:` class'ları mevcut
+- [x] Tam metin arama — `mode: 'insensitive'` ile başlık ve body'de büyük/küçük harf duyarsız arama
+- [x] Profil dropdown — TopBar'da avatar'a tıklayınca Profil / Ayarlar / Yardım / Çıkış Yap menüsü
+- [x] Mesajlaşma — Conversation + Message modelleri, API routes, tam mesajlaşma UI
+- [x] Sidebar temizliği — Ayarlar/Yardım/Çıkış dropdown'a taşındı

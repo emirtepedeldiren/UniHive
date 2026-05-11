@@ -59,6 +59,14 @@ Voting triggers score updates on the author's `User` record. `src/lib/utils.ts:g
 
 `tags` and `imageUrls` on `Question` and `Answer` are native PostgreSQL `String[]` arrays — no JSON serialization. Tag filtering uses Prisma's `{ has: tag }` operator.
 
+### Messaging
+
+Direct messages use `Conversation` + `Message` models. The messages page polls `GET /api/messages/<conversationId>` every 5 seconds — there are no WebSockets. To deep-link into a new conversation, navigate to `/messages?with=<userId>`.
+
+### File uploads
+
+`POST /api/upload` accepts `multipart/form-data` with up to 3 image files (≤5 MB each, JPEG/PNG/WebP/GIF). Files are written to `public/uploads/` on the local filesystem and served as `/uploads/<filename>`. There is no cloud storage — uploaded files are not persisted across deploys.
+
 ### Key files
 
 | Path | Purpose |
@@ -68,6 +76,10 @@ Voting triggers score updates on the author's `User` record. `src/lib/utils.ts:g
 | `src/lib/utils.ts` | Badge logic, Turkish `timeAgo`, `.edu` validation |
 | `src/middleware.ts` | Route protection |
 | `src/app/api/vote/route.ts` | Voting + score/badge side-effects |
+| `src/app/api/profile/route.ts` | PATCH: name, university, department, country, avatarUrl, bio (200-char cap) |
+| `src/app/api/messages/route.ts` | List conversations (GET) / start conversation + first message (POST) |
+| `src/app/api/messages/[conversationId]/route.ts` | Fetch messages (GET) / send message (POST) |
+| `src/app/api/upload/route.ts` | Image upload → `public/uploads/` |
 | `prisma/schema.prisma` | Full data model |
 
 ## Design system

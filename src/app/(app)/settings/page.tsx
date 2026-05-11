@@ -12,7 +12,7 @@ export default async function SettingsPage() {
 
   const user = await prisma.user.findUnique({
     where: { id: userId },
-    select: { name: true, email: true, university: true, department: true, country: true },
+    select: { name: true, email: true, university: true, department: true, country: true, avatarUrl: true, bio: true },
   });
 
   if (!user) redirect("/login");
@@ -20,7 +20,7 @@ export default async function SettingsPage() {
   return (
     <div className="max-w-xl mx-auto px-4 py-8">
       <h1 className="font-extrabold text-2xl text-app-text dark:text-dark-text mb-6">
-        ⚙️ Hesap Ayarları
+        Hesap Ayarları
       </h1>
 
       <div className="post-card mb-6">
@@ -32,6 +32,8 @@ export default async function SettingsPage() {
           initialUniversity={user.university}
           initialDepartment={user.department ?? ""}
           initialCountry={user.country ?? ""}
+          initialBio={user.bio ?? ""}
+          initialAvatarUrl={user.avatarUrl ?? ""}
           email={user.email}
         />
       </div>
