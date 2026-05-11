@@ -19,7 +19,8 @@ export default async function ExplorePage() {
 
   const tagMap: Record<string, { score: number; count: number }> = {};
   for (const q of popularTagData) {
-    q.tags.forEach((t) => {
+    const qTags = Array.isArray(q.tags) ? q.tags : [];
+    qTags.forEach((t) => {
       if (!tagMap[t]) tagMap[t] = { score: 0, count: 0 };
       tagMap[t].score += q.voteScore + 1;
       tagMap[t].count += 1;

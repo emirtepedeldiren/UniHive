@@ -41,7 +41,7 @@ export default function HiveCard({
   showStatus = false,
   showBookmark = false,
 }: HiveCardProps) {
-  const tags = question.tags;
+  const tags = Array.isArray(question.tags) ? question.tags : [];
   const images = question.imageUrls;
 
   return (

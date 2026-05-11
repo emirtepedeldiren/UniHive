@@ -158,7 +158,7 @@ export default async function HomePage({ searchParams }: PageProps) {
         ) : (
           <div className="space-y-3">
             {questions.map((question) => {
-              const qTags = question.tags;
+              const qTags = Array.isArray(question.tags) ? question.tags : [];
               const handle = question.user.name || question.user.email?.split("@")[0] || "?";
               return (
                 <article

@@ -1,8 +1,10 @@
 "use client";
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
+import logoImage from "../../design_assets/stitch_unihive_student_collaboration_platform/unihive_logo/screen.png";
 
 const NAV_ITEMS = [
   {
@@ -89,25 +91,14 @@ export default function Sidebar() {
     <aside className="sidebar">
       {/* Logo */}
       <div className="px-5 py-5 border-b border-app-border dark:border-dark-border">
-        <Link href="/" className="flex items-center gap-2.5">
-          {/* Hex bee logo */}
-          <div className="w-8 h-8 flex-shrink-0">
-            <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M16 1L30 9V23L16 31L2 23V9L16 1Z" fill="#FFD54F" />
-              <path d="M16 7C16 7 12 10 12 14C12 16.5 13.5 18.5 16 19C18.5 18.5 20 16.5 20 14C20 10 16 7 16 7Z" fill="#1F1B12" />
-              <ellipse cx="12" cy="17" rx="3" ry="2" fill="#1F1B12" opacity="0.6" />
-              <ellipse cx="20" cy="17" rx="3" ry="2" fill="#1F1B12" opacity="0.6" />
-              <path d="M14 22H18L17 25H15L14 22Z" fill="#1F1B12" opacity="0.7" />
-            </svg>
-          </div>
-          <div>
-            <span className="font-extrabold text-[17px] tracking-tight text-app-text dark:text-dark-text">
-              UniHive
-            </span>
-            <p className="text-[9px] font-bold tracking-[0.12em] text-app-muted dark:text-dark-muted uppercase -mt-0.5">
-              Akademik Sürü
-            </p>
-          </div>
+        <Link href="/" className="block w-44 ml-2">
+          <Image 
+            src={logoImage} 
+            alt="UniHive Logo" 
+            width={176} 
+            height={70} 
+            className="w-full h-auto object-contain mix-blend-multiply dark:mix-blend-normal dark:bg-white dark:rounded-xl dark:p-1" 
+          />
         </Link>
       </div>
 

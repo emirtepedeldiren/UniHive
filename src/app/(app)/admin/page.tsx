@@ -75,7 +75,7 @@ export default async function AdminPage() {
         ) : (
           <div className="space-y-4">
             {pendingQuestions.map((q) => {
-              const tags = q.tags;
+              const tags = Array.isArray(q.tags) ? q.tags : [];
               return (
                 <div
                   key={q.id}

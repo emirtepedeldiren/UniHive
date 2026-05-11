@@ -76,7 +76,8 @@ export default function RegisterPage() {
       setError("Şifreler eşleşmiyor.");
       return;
     }
-    if (!email.endsWith(".edu.tr") && !email.includes(".edu")) {
+    const cleanEmail = email.trim().toLowerCase();
+    if (!cleanEmail.endsWith(".edu.tr") && !cleanEmail.endsWith(".edu")) {
       setError("Sadece .edu veya .edu.tr uzantılı e-posta kabul edilir.");
       return;
     }
@@ -90,7 +91,7 @@ export default function RegisterPage() {
       const res = await fetch("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password, country, university, department }),
+        body: JSON.stringify({ name, email: cleanEmail, password, country, university, department }),
       });
       
       const data = await res.json();

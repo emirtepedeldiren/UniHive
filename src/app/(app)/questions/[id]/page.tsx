@@ -56,7 +56,7 @@ export default async function QuestionDetailPage({ params }: PageProps) {
     notFound();
   }
 
-  const tags = question.tags;
+  const tags = Array.isArray(question.tags) ? question.tags : [];
   const images = question.imageUrls;
 
   // Fetch user votes

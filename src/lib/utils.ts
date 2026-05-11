@@ -24,7 +24,7 @@ export const BADGE_EMOJI: Record<string, string> = {
  * .edu email validation
  */
 export function isEduEmail(email: string): boolean {
-  return /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.edu(\.[a-zA-Z]{2,})?$/.test(
+  return /^[a-zA-Z0-9._%+-]+@([a-zA-Z0-9.-]+\.)?edu(\.[a-zA-Z]{2,})?$/.test(
     email
   );
 }
