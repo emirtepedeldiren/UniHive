@@ -44,7 +44,7 @@ export async function POST(req: NextRequest) {
         { message: "Her dosya en fazla 5MB olabilir." },
         { status: 400 }
       );
-    }
+    } 
 
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);

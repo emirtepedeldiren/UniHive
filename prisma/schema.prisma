@@ -51,7 +51,7 @@ model Question {
   voteScore    Int        @default(0)
   answers      Answer[]
   votes        Vote[]     @relation("QuestionVotes")
-  user         User       @relation(fields: [userId], references: [id])
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   bookmarks    Bookmark[]
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
@@ -79,8 +79,8 @@ model Answer {
   status       String   @default("PENDING")
   rejectReason String?
   voteScore    Int      @default(0)
-  question     Question @relation(fields: [questionId], references: [id])
-  user         User     @relation(fields: [userId], references: [id])
+  question     Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   votes        Vote[]   @relation("AnswerVotes")
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
@@ -92,10 +92,10 @@ model Vote {
   targetType   String   // "question" | "answer"
   targetId     String
   value        Int      // 1 | -1
-  user         User     @relation(fields: [userId], references: [id])
-  question     Question? @relation("QuestionVotes", fields: [questionId], references: [id])
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  question     Question? @relation("QuestionVotes", fields: [questionId], references: [id], onDelete: Cascade)
   questionId   String?
-  answer       Answer?  @relation("AnswerVotes", fields: [answerId], references: [id])
+  answer       Answer?  @relation("AnswerVotes", fields: [answerId], references: [id], onDelete: Cascade)
   answerId     String?
   createdAt    DateTime @default(now())
 
@@ -109,7 +109,7 @@ model Notification {
   refId     String?
   message   String
   isRead    Boolean  @default(false)
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
 }
 
@@ -128,6 +128,6 @@ model Message {
   body           String
   isRead         Boolean      @default(false)
   conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
-  sender         User         @relation(fields: [senderId], references: [id])
+  sender         User         @relation(fields: [senderId], references: [id], onDelete: Cascade)
   createdAt      DateTime     @default(now())
 }

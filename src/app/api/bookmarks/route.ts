@@ -55,8 +55,8 @@ export async function DELETE(req: NextRequest) {
   }
   const userId = (session.user as { id: string }).id;
 
-  const { searchParams } = new URL(req.url);
-  const questionId = searchParams.get("questionId");
+  const body = await req.json();
+  const { questionId } = body as { questionId?: string };
   if (!questionId) {
     return NextResponse.json({ message: "questionId gerekli." }, { status: 400 });
   }

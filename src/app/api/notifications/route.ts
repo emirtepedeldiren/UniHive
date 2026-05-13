@@ -11,22 +11,21 @@ export async function GET(req: NextRequest) {
   const userId = (session.user as { id: string }).id;
 
   const { searchParams } = new URL(req.url);
-  const unreadOnly = searchParams.get("unread") === "true";
-
-  if (unreadOnly) {
-    const count = await prisma.notification.count({
-      where: { userId, isRead: false },
-    });
-    return NextResponse.json({ count });
-  }
+  const cursor = searchParams.get("cursor");
+  const limit = Math.min(parseInt(searchParams.get("limit") ?? "50", 10), 100);
 
   const notifications = await prisma.notification.findMany({
     where: { userId },
     orderBy: { createdAt: "desc" },
-    take: 50,
+    take: limit + 1,
+    ...(cursor ? { cursor: { id: cursor }, skip: 1 } : {}),
   });
 
-  return NextResponse.json(notifications);
+  const hasMore = notifications.length > limit;
+  const items = hasMore ? notifications.slice(0, limit) : notifications;
+  const nextCursor = hasMore ? items[items.length - 1].id : null;
+
+  return NextResponse.json({ items, nextCursor });
 }
 
 export async function PATCH(req: NextRequest) {

@@ -4,6 +4,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import SettingsForm from "./SettingsForm";
+import ThemeSelector from "./ThemeSelector";
 
 export default async function SettingsPage() {
   const session = await getServerSession(authOptions);
@@ -36,6 +37,13 @@ export default async function SettingsPage() {
           initialAvatarUrl={user.avatarUrl ?? ""}
           email={user.email}
         />
+      </div>
+
+      <div className="post-card mb-6">
+        <h2 className="font-bold text-sm text-app-text dark:text-dark-text mb-4">
+          Görünüm
+        </h2>
+        <ThemeSelector />
       </div>
 
       <div className="post-card opacity-60">

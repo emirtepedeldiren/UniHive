@@ -13,6 +13,7 @@ export default function NewQuestionPage() {
   const [previews, setPreviews] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [skipApproval, setSkipApproval] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
   function addTag() {
@@ -81,6 +82,7 @@ export default function NewQuestionPage() {
         body: body.trim() || null,
         tags,
         imageUrls,
+        skipApproval,
       }),
     });
 
@@ -316,6 +318,21 @@ export default function NewQuestionPage() {
             kazanacaksın.
           </p>
         </div>
+
+        {/* Dev: skip approval */}
+        <label className="flex items-center gap-2 cursor-pointer select-none w-fit">
+          <div className="relative">
+            <input
+              type="checkbox"
+              className="sr-only"
+              checked={skipApproval}
+              onChange={(e) => setSkipApproval(e.target.checked)}
+            />
+            <div className={`w-9 h-5 rounded-full transition-colors ${skipApproval ? "bg-honey" : "bg-app-border dark:bg-dark-border"}`} />
+            <div className={`absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform ${skipApproval ? "translate-x-4" : ""}`} />
+          </div>
+          <span className="text-xs text-app-muted dark:text-dark-muted font-medium">Admin onayını atla (test)</span>
+        </label>
 
         {/* Actions */}
         <div className="flex gap-3 justify-end pt-1">

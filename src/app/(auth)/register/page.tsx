@@ -3,42 +3,9 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+import { signIn } from "next-auth/react";
 import logoImage from "../../../../design_assets/stitch_unihive_student_collaboration_platform/unihive_logo/screen.png";
-
-const COUNTRIES = [
-  "Türkiye",
-  "Kuzey Kıbrıs Türk Cumhuriyeti",
-  "Azerbaycan",
-  "Amerika Birleşik Devletleri",
-  "İngiltere",
-  "Almanya",
-];
-
-const UNIVERSITIES = [
-  "İstanbul Teknik Üniversitesi",
-  "Orta Doğu Teknik Üniversitesi",
-  "Boğaziçi Üniversitesi",
-  "Hacettepe Üniversitesi",
-  "Ankara Üniversitesi",
-  "İstanbul Üniversitesi",
-  "Ege Üniversitesi",
-  "Dokuz Eylül Üniversitesi",
-  "Koç Üniversitesi",
-  "Sabancı Üniversitesi",
-];
-
-const DEPARTMENTS = [
-  "Bilgisayar Mühendisliği",
-  "Elektrik-Elektronik Mühendisliği",
-  "Makine Mühendisliği",
-  "Matematik",
-  "Fizik",
-  "Kimya",
-  "Tıp",
-  "Hukuk",
-  "İşletme",
-  "Mimarlık",
-];
+import { COUNTRIES, UNIVERSITIES_BY_COUNTRY, DEPARTMENTS, type Country } from "@/lib/constants/registration";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -50,6 +17,8 @@ export default function RegisterPage() {
   const [country, setCountry] = useState("");
   const [university, setUniversity] = useState("");
   const [department, setDepartment] = useState("");
+
+  const universities = country ? (UNIVERSITIES_BY_COUNTRY[country as Country] ?? []) : [];
 
   // Step 2
   const [name, setName] = useState("");
@@ -100,9 +69,18 @@ export default function RegisterPage() {
         setLoading(false);
         return;
       }
-      
-      // Kayıt başarılı, login sayfasına dön
-      router.push("/login?registered=1");
+
+      const result = await signIn("credentials", {
+        redirect: false,
+        email: cleanEmail,
+        password,
+      });
+
+      if (result?.ok) {
+        router.push("/");
+      } else {
+        router.push("/login?registered=1");
+      }
     } catch {
       setError("Bir hata oluştu. Lütfen tekrar deneyin.");
       setLoading(false);
@@ -146,7 +124,7 @@ export default function RegisterPage() {
               <div className="relative">
                 <select
                   value={country}
-                  onChange={(e) => setCountry(e.target.value)}
+                  onChange={(e) => { setCountry(e.target.value); setUniversity(""); setDepartment(""); }}
                   className="w-full bg-transparent border border-gray-300 dark:border-gray-700 rounded-md px-4 pr-8 py-3 focus:outline-none focus:ring-2 focus:ring-honey appearance-none text-app-text dark:text-dark-text"
                 >
                   <option value="" disabled>Ülke seç...</option>
@@ -166,8 +144,8 @@ export default function RegisterPage() {
                   onChange={(e) => setUniversity(e.target.value)}
                   className="w-full bg-transparent border border-gray-300 dark:border-gray-700 rounded-md px-4 pr-8 py-3 focus:outline-none focus:ring-2 focus:ring-honey appearance-none text-app-text dark:text-dark-text"
                 >
-                  <option value="" disabled>Üniversite seç...</option>
-                  {UNIVERSITIES.map((u) => (
+                  <option value="" disabled>{country ? "Üniversite seç..." : "Önce ülke seçiniz"}</option>
+                  {universities.map((u) => (
                     <option key={u} value={u} className="text-black">{u}</option>
                   ))}
                 </select>

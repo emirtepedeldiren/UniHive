@@ -9,6 +9,8 @@ import Pollinate from "@/components/ui/Pollinate";
 import AnswerForm from "./AnswerForm";
 import BestAnswerButton from "./BestAnswerButton";
 import ShareButton from "@/components/ui/ShareButton";
+import QuestionActions from "./QuestionActions";
+import AnswerActions from "./AnswerActions";
 import { timeAgo } from "@/lib/utils";
 
 interface PageProps {
@@ -70,6 +72,39 @@ export default async function QuestionDetailPage({ params }: PageProps) {
       userVotes[v.targetId] = v.value;
     });
   }
+
+  // Fetch related questions by shared tags
+  const relatedQuestions =
+    tags.length > 0
+      ? await prisma.question.findMany({
+          where: {
+            status: "APPROVED",
+            id: { not: question.id },
+            tags: { hasSome: tags },
+          },
+          select: { id: true, title: true, tags: true },
+          orderBy: { voteScore: "desc" },
+          take: 5,
+        })
+      : [];
+
+  // Fetch top contributors for this question's tags
+  const topContributors =
+    tags.length > 0
+      ? await prisma.user.findMany({
+          where: {
+            answers: {
+              some: {
+                status: "APPROVED",
+                question: { tags: { hasSome: tags } },
+              },
+            },
+          },
+          select: { id: true, name: true, email: true, score: true, badge: true },
+          orderBy: { score: "desc" },
+          take: 3,
+        })
+      : [];
 
   const isQuestionOwner = userId === question.userId;
   const qHandle = question.user.name || "?";
@@ -154,25 +189,23 @@ export default async function QuestionDetailPage({ params }: PageProps) {
 
               {/* Footer actions */}
               <div className="flex items-center gap-6 mt-6 pt-4 border-t border-app-border dark:border-dark-border">
-                <button className="flex items-center gap-2 text-app-muted text-sm hover:text-app-text transition-colors">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <polyline points="17 1 21 5 17 9" />
-                    <path d="M3 11V9a4 4 0 0 1 4-4h14" />
-                    <polyline points="7 23 3 19 7 15" />
-                    <path d="M21 13v2a4 4 0 0 1-4 4H3" />
-                  </svg>
-                  {question._count.answers} Tekrarla
-                </button>
                 <div className="flex items-center gap-2 text-app-muted text-sm">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
                   </svg>
                   {question._count.answers} Yanıt
                 </div>
-                <div className="ml-auto">
+                <div className="ml-auto flex items-center gap-3">
                   <ShareButton path={`/questions/${question.id}`} title={question.title} />
                 </div>
               </div>
+              {isQuestionOwner && (
+                <QuestionActions
+                  questionId={question.id}
+                  initialTitle={question.title}
+                  initialBody={question.body ?? null}
+                />
+              )}
             </div>
           </div>
         </article>
@@ -258,11 +291,14 @@ export default async function QuestionDetailPage({ params }: PageProps) {
                         </div>
                      )}
 
-                     {isQuestionOwner && !question.isResolved && session && (
-                        <div className="mt-3">
-                          <BestAnswerButton answerId={answer.id} questionId={question.id} isBest={answer.isBest} />
-                        </div>
-                     )}
+                     <div className="flex items-center gap-4 mt-3">
+                       {isQuestionOwner && !question.isResolved && session && (
+                         <BestAnswerButton answerId={answer.id} questionId={question.id} isBest={answer.isBest} />
+                       )}
+                       {userId === answer.user.id && (
+                         <AnswerActions answerId={answer.id} initialBody={answer.body} />
+                       )}
+                     </div>
                   </div>
                 </div>
               </div>
@@ -273,28 +309,36 @@ export default async function QuestionDetailPage({ params }: PageProps) {
 
       {/* Right Sidebar */}
       <aside className="w-72 flex-shrink-0 space-y-4">
-        {/* Related topics */}
-        <div className="sidebar-card">
-           <h3 className="font-bold text-sm flex items-center gap-2 text-app-text dark:text-dark-text mb-3">
+        {/* Related Questions */}
+        {relatedQuestions.length > 0 && (
+          <div className="sidebar-card">
+            <h3 className="font-bold text-sm flex items-center gap-2 text-app-text dark:text-dark-text mb-3">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-honey">
                 <rect x="3" y="3" width="7" height="7" rx="1" />
                 <rect x="14" y="3" width="7" height="7" rx="1" />
                 <rect x="14" y="14" width="7" height="7" rx="1" />
                 <rect x="3" y="14" width="7" height="7" rx="1" />
               </svg>
-              İlgili Konular
-           </h3>
-           <div className="flex flex-wrap gap-2">
-              <span className="text-xs px-3 py-1.5 rounded-full border border-app-border text-app-text dark:text-dark-text">Veri Yapıları</span>
-              <span className="text-xs px-3 py-1.5 rounded-full border border-app-border text-app-text dark:text-dark-text">Sıralama Algoritmaları</span>
-              <span className="text-xs px-3 py-1.5 rounded-full border border-app-border text-app-text dark:text-dark-text">Big O Gösterimi</span>
-              <span className="text-xs px-3 py-1.5 rounded-full border border-app-border text-app-text dark:text-dark-text">CS201</span>
-           </div>
-        </div>
+              İlgili Sorular
+            </h3>
+            <div className="space-y-2">
+              {relatedQuestions.map((rq) => (
+                <Link
+                  key={rq.id}
+                  href={`/questions/${rq.id}`}
+                  className="block text-xs text-app-text dark:text-dark-text hover:text-honey transition-colors line-clamp-2"
+                >
+                  {rq.title}
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
 
-        {/* Top Contributors for this tag */}
-        <div className="sidebar-card">
-           <h3 className="font-bold text-sm flex items-center gap-2 text-app-text dark:text-dark-text mb-3">
+        {/* Top Contributors for this question's tags */}
+        {topContributors.length > 0 && (
+          <div className="sidebar-card">
+            <h3 className="font-bold text-sm flex items-center gap-2 text-app-text dark:text-dark-text mb-3">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-honey">
                 <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
                 <circle cx="9" cy="7" r="4"></circle>
@@ -302,25 +346,25 @@ export default async function QuestionDetailPage({ params }: PageProps) {
                 <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
               </svg>
               En Çok Katkı Sağlayanlar
-           </h3>
-           <div className="space-y-3">
-              {/* Dummy data to match mockup */}
-              <div className="flex items-center gap-3">
-                 <div className="w-8 h-8 rounded-full hex-clip bg-honey flex items-center justify-center font-bold text-hive-black text-xs">D</div>
-                 <div>
-                    <p className="font-bold text-sm text-app-text dark:text-dark-text">David Chen</p>
-                    <p className="text-xs text-app-muted">240 Polen Puanı</p>
-                 </div>
-              </div>
-              <div className="flex items-center gap-3">
-                 <div className="w-8 h-8 rounded-full hex-clip bg-honey flex items-center justify-center font-bold text-hive-black text-xs">S</div>
-                 <div>
-                    <p className="font-bold text-sm text-app-text dark:text-dark-text">Sarah Jenkins</p>
-                    <p className="text-xs text-app-muted">185 Polen Puanı</p>
-                 </div>
-              </div>
-           </div>
-        </div>
+            </h3>
+            <div className="space-y-3">
+              {topContributors.map((u) => {
+                const handle = u.name || u.email?.split("@")[0] || "?";
+                return (
+                  <Link key={u.id} href={`/profile/${u.id}`} className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+                    <div className="w-8 h-8 rounded-full hex-clip bg-honey flex items-center justify-center font-bold text-hive-black text-xs flex-shrink-0">
+                      {handle.charAt(0).toUpperCase()}
+                    </div>
+                    <div>
+                      <p className="font-bold text-sm text-app-text dark:text-dark-text">{handle}</p>
+                      <p className="text-xs text-app-muted">{u.score} Polen Puanı</p>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        )}
       </aside>
     </div>
   );

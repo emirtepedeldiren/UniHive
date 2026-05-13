@@ -1,15 +1,10 @@
 import React from "react";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
+import { EXPLORE_CATEGORIES } from "@/lib/constants/explore";
 
 export default async function ExplorePage() {
-  const categories = [
-    { id: "matematik", label: "Matematik", icon: "🧮" },
-    { id: "muhendislik", label: "Mühendislik", icon: "⚙️" },
-    { id: "guzel-sanatlar", label: "Güzel Sanatlar", icon: "🎨" },
-    { id: "yasam-bilimleri", label: "Yaşam Bilimleri", icon: "🔬" },
-    { id: "bilgisayar-bilimleri", label: "Bilgisayar Bilimleri", icon: "💻" },
-  ];
+  const categories = EXPLORE_CATEGORIES;
 
   const popularTagData = await prisma.question.findMany({
     where: { status: "APPROVED" },

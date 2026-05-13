@@ -14,7 +14,11 @@ export default function BookmarkButton({ questionId, initialBookmarked }: Props)
     if (loading) return;
     setLoading(true);
     if (bookmarked) {
-      await fetch(`/api/bookmarks?questionId=${questionId}`, { method: "DELETE" });
+      await fetch("/api/bookmarks", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ questionId }),
+      });
     } else {
       await fetch("/api/bookmarks", {
         method: "POST",

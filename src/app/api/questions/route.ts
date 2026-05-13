@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
   }
 
   const userId = session.user.id;
-  const { title, body, tags, imageUrls } = await req.json();
+  const { title, body, tags, imageUrls, skipApproval } = await req.json();
 
   if (!title?.trim()) {
     return NextResponse.json({ message: "Başlık zorunludur." }, { status: 400 });
@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
       body: body?.trim() || null,
       tags: Array.isArray(tags) ? tags.slice(0, 5) : [],
       imageUrls: Array.isArray(imageUrls) ? imageUrls.slice(0, 3) : [],
-      status: "PENDING",
+      status: skipApproval ? "APPROVED" : "PENDING",
     },
   });
 

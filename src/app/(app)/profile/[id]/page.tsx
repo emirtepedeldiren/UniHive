@@ -5,20 +5,13 @@ import Image from "next/image";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { timeAgo, BADGE_EMOJI } from "@/lib/utils";
+import { timeAgo, BADGE_EMOJI, BADGE_LEVELS } from "@/lib/utils";
 import HiveCard from "@/components/ui/HiveCard";
 
 interface PageProps {
   params: Promise<{ id: string }>;
   searchParams: Promise<{ tab?: string }>;
 }
-
-const BADGE_LEVELS = [
-  { name: "Drone", min: 0, next: 50 },
-  { name: "Worker Bee", min: 50, next: 200 },
-  { name: "Scout Bee", min: 200, next: 500 },
-  { name: "Queen Bee", min: 500, next: null },
-];
 
 export default async function ProfilePage({ params, searchParams }: PageProps) {
   const { id } = await params;

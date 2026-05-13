@@ -4,13 +4,12 @@ import { useRouter } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
 import Image from "next/image";
-import { useTheme } from "./Providers";
+import NotificationsDropdown from "./ui/NotificationsDropdown";
 
 export default function TopBar() {
   const [query, setQuery] = useState("");
   const [unreadCount, setUnreadCount] = useState(0);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const { dark, toggle: toggleDark } = useTheme();
   const router = useRouter();
   const { data: session } = useSession();
   const user = session?.user as { id?: string; name?: string; email?: string; avatarUrl?: string } | undefined;
@@ -18,10 +17,17 @@ export default function TopBar() {
 
   useEffect(() => {
     if (!session) return;
-    fetch("/api/notifications?unread=true")
+    fetch("/api/notifications/count")
       .then((r) => r.json())
       .then((data: { count?: number }) => setUnreadCount(data.count ?? 0))
       .catch(() => {});
+    const interval = setInterval(() => {
+      fetch("/api/notifications/count")
+        .then((r) => r.json())
+        .then((data: { count?: number }) => setUnreadCount(data.count ?? 0))
+        .catch(() => {});
+    }, 30000);
+    return () => clearInterval(interval);
   }, [session]);
 
   useEffect(() => {
@@ -60,22 +66,10 @@ export default function TopBar() {
       </form>
 
       <div className="flex items-center gap-1 ml-auto">
-        {/* Notifications */}
-        <Link
-          href="/notifications"
-          id="topbar-notifications"
-          className="relative w-9 h-9 rounded-full flex items-center justify-center text-app-muted hover:bg-app-hover dark:hover:bg-dark-hover transition-colors"
-        >
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-            <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-          </svg>
-          {unreadCount > 0 && (
-            <span className="absolute -top-0.5 -right-0.5 min-w-[16px] h-4 bg-sting text-white text-[9px] font-bold rounded-full flex items-center justify-center px-0.5">
-              {unreadCount > 9 ? "9+" : unreadCount}
-            </span>
-          )}
-        </Link>
+        {/* Notifications dropdown */}
+        {session && (
+          <NotificationsDropdown unreadCount={unreadCount} onCountChange={setUnreadCount} />
+        )}
 
         {/* Bookmarks */}
         <Link href="/bookmarks" id="topbar-bookmarks" className="w-9 h-9 rounded-full flex items-center justify-center text-app-muted hover:bg-app-hover dark:hover:bg-dark-hover transition-colors">
@@ -145,23 +139,6 @@ export default function TopBar() {
                   </svg>
                   Yardım
                 </Link>
-                <button
-                  onClick={toggleDark}
-                  className="w-full flex items-center justify-between px-4 py-2.5 text-sm text-app-text dark:text-dark-text hover:bg-app-hover dark:hover:bg-dark-hover transition-colors"
-                >
-                  <span className="flex items-center gap-2.5">
-                    {dark ? (
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <circle cx="12" cy="12" r="5" /><line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" /><line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" /><line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" /><line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
-                      </svg>
-                    ) : (
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-                      </svg>
-                    )}
-                    {dark ? "Açık Mod" : "Karanlık Mod"}
-                  </span>
-                </button>
                 <div className="border-t border-app-border dark:border-dark-border my-1" />
                 <button
                   onClick={() => { setDropdownOpen(false); signOut({ callbackUrl: "/login" }); }}

@@ -2,14 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { getBadgeForScore } from "@/lib/utils";
-
-// Point rules (PRD Section 3)
-const POINTS = {
-  question_approved: 5,
-  answer_approved: 10,
-  content_rejected: -5,
-};
+import { updateScoreAndBadge } from "@/lib/services/gamification.service";
+import { createNotification, buildModerationMessage } from "@/lib/services/notification.service";
+import { POINTS } from "@/lib/constants/points";
 
 export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions);
@@ -27,29 +22,16 @@ export async function POST(req: NextRequest) {
   }
 
   const status = action === "approve" ? "APPROVED" : "REJECTED";
-
   let ownerId: string | null = null;
+  let refId: string = id;
 
   if (type === "question") {
     const q = await prisma.question.update({
       where: { id },
       data: { status, rejectReason: reason ?? null },
-      select: { userId: true, title: true },
+      select: { userId: true },
     });
     ownerId = q.userId;
-
-    // Notification
-    await prisma.notification.create({
-      data: {
-        userId: q.userId,
-        type: action === "approve" ? "QUESTION_APPROVED" : "QUESTION_REJECTED",
-        refId: id,
-        message:
-          action === "approve"
-            ? `Sorunuz onaylandı ve feed'e çıktı! +5 puan kazandınız 🍯`
-            : `Sorunuz reddedildi. ${reason ? `Gerekçe: ${reason}` : ""}`,
-      },
-    });
   } else {
     const a = await prisma.answer.update({
       where: { id },
@@ -57,40 +39,28 @@ export async function POST(req: NextRequest) {
       select: { userId: true, questionId: true },
     });
     ownerId = a.userId;
-
-    await prisma.notification.create({
-      data: {
-        userId: a.userId,
-        type: action === "approve" ? "ANSWER_APPROVED" : "ANSWER_REJECTED",
-        refId: a.questionId,
-        message:
-          action === "approve"
-            ? `Cevabınız onaylandı! +10 puan kazandınız 🍯`
-            : `Cevabınız reddedildi. ${reason ? `Gerekçe: ${reason}` : ""}`,
-      },
-    });
+    refId = a.questionId;
   }
 
-  // Award / deduct points
   if (ownerId) {
-    const pointKey = action === "approve"
-      ? type === "question" ? "question_approved" : "answer_approved"
-      : "content_rejected";
+    const notifType =
+      action === "approve"
+        ? type === "question" ? "QUESTION_APPROVED" : "ANSWER_APPROVED"
+        : type === "question" ? "QUESTION_REJECTED" : "ANSWER_REJECTED";
 
-    const delta = POINTS[pointKey as keyof typeof POINTS];
+    await createNotification(
+      ownerId,
+      notifType,
+      buildModerationMessage(type as "question" | "answer", action as "approve" | "reject", reason),
+      refId
+    );
 
-    const updatedUser = await prisma.user.update({
-      where: { id: ownerId },
-      data: { score: { increment: delta } },
-    });
+    const delta =
+      action === "approve"
+        ? type === "question" ? POINTS.QUESTION_APPROVED : POINTS.ANSWER_APPROVED
+        : POINTS.CONTENT_REJECTED;
 
-    const newBadge = getBadgeForScore(Math.max(0, updatedUser.score));
-    if (newBadge !== updatedUser.badge) {
-      await prisma.user.update({
-        where: { id: ownerId },
-        data: { badge: newBadge },
-      });
-    }
+    await updateScoreAndBadge(ownerId, delta);
   }
 
   return NextResponse.json({ success: true });

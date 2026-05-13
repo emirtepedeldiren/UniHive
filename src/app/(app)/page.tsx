@@ -6,14 +6,15 @@ import { prisma } from "@/lib/prisma";
 import { timeAgo } from "@/lib/utils";
 import BookmarkButton from "@/components/ui/BookmarkButton";
 import ShareButton from "@/components/ui/ShareButton";
+import PostedBanner from "@/components/ui/PostedBanner";
 
 interface PageProps {
-  searchParams: Promise<{ q?: string; tag?: string; sort?: string }>;
+  searchParams: Promise<{ q?: string; tag?: string; sort?: string; posted?: string }>;
 }
 
 export default async function HomePage({ searchParams }: PageProps) {
   const params = await searchParams;
-  const { q, tag, sort = "hot" } = params;
+  const { q, tag, sort = "hot", posted } = params;
   const session = await getServerSession(authOptions);
   const user = session?.user as { id: string; name?: string; email?: string } | undefined;
 
@@ -85,6 +86,9 @@ export default async function HomePage({ searchParams }: PageProps) {
     <div className="flex max-w-5xl mx-auto px-4 py-6 gap-6">
       {/* Feed */}
       <div className="flex-1 min-w-0">
+        {/* Success banner after question submission */}
+        {posted === "1" && <PostedBanner />}
+
         {/* Compose box */}
         {session && (
           <div className="compose-box animate-fade-up">

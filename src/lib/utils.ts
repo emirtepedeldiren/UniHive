@@ -8,6 +8,13 @@ export const BADGE_THRESHOLDS = [
   { min: 500, badge: "Queen Bee" },
 ] as const;
 
+export const BADGE_LEVELS = [
+  { name: "Drone", min: 0, next: 50 },
+  { name: "Worker Bee", min: 50, next: 200 },
+  { name: "Scout Bee", min: 200, next: 500 },
+  { name: "Queen Bee", min: 500, next: null },
+] as const;
+
 export function getBadgeForScore(score: number): string {
   const sorted = [...BADGE_THRESHOLDS].sort((a, b) => b.min - a.min);
   return sorted.find((t) => score >= t.min)?.badge ?? "Drone";

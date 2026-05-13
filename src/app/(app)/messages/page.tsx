@@ -4,6 +4,14 @@ import { useSession } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 
+interface UserResult {
+  id: string;
+  name: string | null;
+  email: string;
+  avatarUrl: string | null;
+  university: string;
+}
+
 interface Participant {
   id: string;
   name: string | null;
@@ -69,6 +77,86 @@ function timeShort(date: string) {
   return `${Math.floor(hours / 24)}g`;
 }
 
+function UserSearch({ onSelect }: { onSelect: (user: UserResult) => void }) {
+  const [query, setQuery] = useState("");
+  const [results, setResults] = useState<UserResult[]>([]);
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  useEffect(() => {
+    if (!query.trim()) { setResults([]); setOpen(false); return; }
+    setLoading(true);
+    const timer = setTimeout(async () => {
+      const res = await fetch(`/api/users/search?q=${encodeURIComponent(query)}`);
+      if (res.ok) {
+        const data = await res.json() as UserResult[];
+        setResults(data);
+        setOpen(true);
+      }
+      setLoading(false);
+    }, 200);
+    return () => clearTimeout(timer);
+  }, [query]);
+
+  return (
+    <div ref={containerRef} className="relative">
+      <input
+        type="text"
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        onFocus={() => { if (results.length) setOpen(true); }}
+        placeholder="İsim veya e-posta ile ara..."
+        className="input-field text-sm w-full"
+        autoFocus
+      />
+      {loading && (
+        <div className="absolute right-3 top-1/2 -translate-y-1/2">
+          <svg className="animate-spin w-4 h-4 text-app-muted" viewBox="0 0 24 24" fill="none">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+          </svg>
+        </div>
+      )}
+      {open && results.length > 0 && (
+        <div className="absolute left-0 right-0 top-full mt-1 bg-white dark:bg-dark-card border border-app-border dark:border-dark-border rounded-xl shadow-lg z-50 overflow-hidden">
+          {results.map((u) => (
+            <button
+              key={u.id}
+              type="button"
+              onMouseDown={(e) => { e.preventDefault(); onSelect(u); setQuery(""); setOpen(false); }}
+              className="w-full flex items-center gap-3 px-4 py-2.5 hover:bg-app-hover dark:hover:bg-dark-hover transition-colors text-left"
+            >
+              <Avatar user={u} size={8} />
+              <div className="min-w-0">
+                <p className="text-sm font-semibold text-app-text dark:text-dark-text truncate">
+                  {u.name || u.email.split("@")[0]}
+                </p>
+                <p className="text-xs text-app-muted dark:text-dark-muted truncate">{u.university}</p>
+              </div>
+            </button>
+          ))}
+        </div>
+      )}
+      {open && !loading && results.length === 0 && query.trim() && (
+        <div className="absolute left-0 right-0 top-full mt-1 bg-white dark:bg-dark-card border border-app-border dark:border-dark-border rounded-xl shadow-lg z-50 px-4 py-3 text-sm text-app-muted dark:text-dark-muted">
+          Kullanıcı bulunamadı.
+        </div>
+      )}
+    </div>
+  );
+}
+
 function MessagesContent() {
   const { data: session } = useSession();
   const currentUser = session?.user as { id?: string; name?: string; email?: string } | undefined;
@@ -80,9 +168,10 @@ function MessagesContent() {
   const [detail, setDetail] = useState<ConversationDetail | null>(null);
   const [input, setInput] = useState("");
   const [sending, setSending] = useState(false);
-  const [newRecipientId, setNewRecipientId] = useState(withUserId ?? "");
-  const [startMode, setStartMode] = useState(!!withUserId);
+  const [selectedUser, setSelectedUser] = useState<UserResult | null>(null);
+  const [startMode, setStartMode] = useState(!withUserId);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const loadConversations = useCallback(async () => {
     const res = await fetch("/api/messages");
@@ -99,6 +188,19 @@ function MessagesContent() {
     loadConversations();
   }, [session, loadConversations]);
 
+  // Deep-link: ?with=<userId>
+  useEffect(() => {
+    if (!withUserId || !session) return;
+    fetch(`/api/users/search?q=${encodeURIComponent(withUserId)}`)
+      .then((r) => r.json())
+      .catch(() => []);
+    setStartMode(false);
+    fetch("/api/messages", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ recipientId: withUserId, body: " " }) })
+      .then(() => loadConversations())
+      .catch(() => {});
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [withUserId, session]);
+
   useEffect(() => {
     if (!activeConvId) return;
     loadDetail(activeConvId);
@@ -110,38 +212,52 @@ function MessagesContent() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [detail?.messages]);
 
-  async function handleSend(e: React.FormEvent) {
-    e.preventDefault();
-    if (!input.trim() || !activeConvId) return;
-    setSending(true);
-    await fetch(`/api/messages/${activeConvId}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ body: input.trim() }),
-    });
+  function openStartMode() {
+    setStartMode(true);
+    setActiveConvId(null);
+    setDetail(null);
+    setSelectedUser(null);
     setInput("");
-    setSending(false);
-    await loadDetail(activeConvId);
-    await loadConversations();
   }
 
-  async function handleStart(e: React.FormEvent) {
+  function handleUserSelect(user: UserResult) {
+    setSelectedUser(user);
+    setTimeout(() => inputRef.current?.focus(), 50);
+  }
+
+  async function handleSend(e: React.FormEvent) {
     e.preventDefault();
-    if (!newRecipientId.trim() || !input.trim()) return;
-    setSending(true);
-    const res = await fetch("/api/messages", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ recipientId: newRecipientId.trim(), body: input.trim() }),
-    });
-    setSending(false);
-    if (res.ok) {
-      const data = await res.json() as { conversationId: string };
+    if (!input.trim()) return;
+
+    if (startMode) {
+      if (!selectedUser) return;
+      setSending(true);
+      const res = await fetch("/api/messages", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ recipientId: selectedUser.id, body: input.trim() }),
+      });
+      setSending(false);
+      if (res.ok) {
+        const data = await res.json() as { conversationId: string };
+        setInput("");
+        setStartMode(false);
+        setSelectedUser(null);
+        await loadConversations();
+        setActiveConvId(data.conversationId);
+      }
+    } else {
+      if (!activeConvId) return;
+      setSending(true);
+      await fetch(`/api/messages/${activeConvId}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ body: input.trim() }),
+      });
       setInput("");
-      setStartMode(false);
-      setNewRecipientId("");
+      setSending(false);
+      await loadDetail(activeConvId);
       await loadConversations();
-      setActiveConvId(data.conversationId);
     }
   }
 
@@ -158,12 +274,13 @@ function MessagesContent() {
   return (
     <div className="max-w-5xl mx-auto px-4 py-6">
       <div className="flex h-[calc(100vh-8rem)] border border-app-border dark:border-dark-border rounded-xl overflow-hidden bg-white dark:bg-dark-card">
+
         {/* Conversation list */}
         <div className="w-72 flex-shrink-0 border-r border-app-border dark:border-dark-border flex flex-col">
           <div className="p-4 border-b border-app-border dark:border-dark-border flex items-center justify-between">
             <h2 className="font-bold text-app-text dark:text-dark-text">Mesajlar</h2>
             <button
-              onClick={() => { setStartMode(true); setActiveConvId(null); setDetail(null); }}
+              onClick={openStartMode}
               className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-app-hover dark:hover:bg-dark-hover transition-colors text-app-muted"
               title="Yeni mesaj"
             >
@@ -210,27 +327,48 @@ function MessagesContent() {
         {/* Message area */}
         <div className="flex-1 flex flex-col min-w-0">
           {startMode ? (
-            <form onSubmit={handleStart} className="flex flex-col h-full">
-              <div className="p-4 border-b border-app-border dark:border-dark-border">
-                <p className="text-sm font-semibold text-app-text dark:text-dark-text mb-2">Yeni Mesaj</p>
-                <input
-                  type="text"
-                  value={newRecipientId}
-                  onChange={(e) => setNewRecipientId(e.target.value)}
-                  placeholder="Kullanıcı ID'si..."
-                  className="input-field text-sm"
-                />
+            <form onSubmit={handleSend} className="flex flex-col h-full">
+              <div className="p-4 border-b border-app-border dark:border-dark-border space-y-3">
+                <p className="text-sm font-semibold text-app-text dark:text-dark-text">Yeni Mesaj</p>
+                {selectedUser ? (
+                  <div className="flex items-center gap-2 px-3 py-2 bg-honey/10 border border-honey/40 rounded-lg">
+                    <Avatar user={selectedUser} size={7} />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-semibold text-app-text dark:text-dark-text truncate">
+                        {selectedUser.name || selectedUser.email.split("@")[0]}
+                      </p>
+                      <p className="text-xs text-app-muted dark:text-dark-muted truncate">{selectedUser.university}</p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setSelectedUser(null)}
+                      className="text-app-muted hover:text-sting transition-colors flex-shrink-0"
+                    >
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
+                      </svg>
+                    </button>
+                  </div>
+                ) : (
+                  <UserSearch onSelect={handleUserSelect} />
+                )}
               </div>
               <div className="flex-1" />
               <div className="p-4 border-t border-app-border dark:border-dark-border flex gap-2">
                 <input
+                  ref={inputRef}
                   type="text"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
-                  placeholder="Mesaj yaz..."
-                  className="flex-1 input-field text-sm"
+                  placeholder={selectedUser ? "Mesaj yaz..." : "Önce kullanıcı seçin..."}
+                  disabled={!selectedUser}
+                  className="flex-1 input-field text-sm disabled:opacity-50"
                 />
-                <button type="submit" disabled={sending || !input.trim() || !newRecipientId.trim()} className="btn-primary disabled:opacity-50">
+                <button
+                  type="submit"
+                  disabled={sending || !input.trim() || !selectedUser}
+                  className="btn-primary disabled:opacity-50"
+                >
                   Gönder
                 </button>
               </div>
@@ -239,9 +377,11 @@ function MessagesContent() {
             <>
               <div className="p-4 border-b border-app-border dark:border-dark-border flex items-center gap-3">
                 {activeOther && <Avatar user={activeOther} size={8} />}
-                <span className="font-semibold text-app-text dark:text-dark-text">
-                  {activeOther?.name || activeOther?.email?.split("@")[0]}
-                </span>
+                <div>
+                  <span className="font-semibold text-app-text dark:text-dark-text">
+                    {activeOther?.name || activeOther?.email?.split("@")[0]}
+                  </span>
+                </div>
               </div>
               <div className="flex-1 overflow-y-auto p-4 space-y-3">
                 {detail.messages.map((m) => {
@@ -265,6 +405,7 @@ function MessagesContent() {
                   type="text"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
+                  onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleSend(e); } }}
                   placeholder="Mesaj yaz..."
                   className="flex-1 input-field text-sm"
                 />
